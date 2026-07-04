@@ -30,4 +30,4 @@ Supabase URL and anon key, which are safe for the browser (protected by RLS).
 
 ## Live URL
 
-_Not yet deployed._
+https://30-min-hwaseong-ai-map.vercel.app/
