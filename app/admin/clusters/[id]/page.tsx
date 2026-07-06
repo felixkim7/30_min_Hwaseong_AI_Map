@@ -4,17 +4,9 @@ import { copy } from "@/lib/copy";
 import { isAdminAuthenticated } from "@/lib/adminAuth";
 import { AdminLoginForm } from "@/components/AdminLoginForm";
 import { supabaseServer } from "@/lib/supabase/server";
-import { clusterSchema, savedReportSchema } from "@/lib/schema";
-import { SCORE_WEIGHTS } from "@/lib/scoring";
-
-const FACTOR_LABELS: Record<keyof typeof SCORE_WEIGHTS, string> = {
-  recurrence: "반복도",
-  safety: "안전",
-  time_sensitivity: "시간 민감도",
-  vulnerable_impact: "교통약자 영향",
-  policy_alignment: "정책 부합도",
-  feasibility: "실현 가능성",
-};
+import { clusterSchema, savedReportSchema, policyReportSchema } from "@/lib/schema";
+import { SCORE_FACTOR_LABELS as FACTOR_LABELS } from "@/lib/scoring";
+import { PolicyReportPanel } from "@/components/PolicyReportPanel";
 
 function ReportCard({
   report,
@@ -78,6 +70,18 @@ export default async function ClusterDetailPage({
 
   const members = membersError ? [] : savedReportSchema.array().parse(membersData);
 
+  const { data: policyReportData } = await supabaseServer
+    .from("policy_reports")
+    .select("*")
+    .eq("cluster_id", id)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  const latestPolicyReport = policyReportData
+    ? policyReportSchema.parse(policyReportData)
+    : null;
+
   return (
     <div className="flex flex-1 flex-col gap-6 bg-zinc-50 px-4 py-6 dark:bg-black sm:px-6">
       <div className="flex flex-col gap-2">
@@ -125,20 +129,16 @@ export default async function ClusterDetailPage({
         </div>
       )}
 
+      <PolicyReportPanel
+        clusterId={cluster.id}
+        clusterTitle={cluster.title}
+        initialReport={latestPolicyReport}
+      />
+
       <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-            {copy.admin.clusterDetail.memberReportsTitle} ({members.length})
-          </h2>
-          <button
-            type="button"
-            title={copy.admin.clusterDetail.generateReportStub}
-            className="cursor-not-allowed rounded-full border border-zinc-300 px-3 py-1.5 text-xs text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
-            disabled
-          >
-            {copy.admin.clusterDetail.generateReport}
-          </button>
-        </div>
+        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+          {copy.admin.clusterDetail.memberReportsTitle} ({members.length})
+        </h2>
         <div className="flex flex-col gap-2">
           {members.map((report) => (
             <ReportCard

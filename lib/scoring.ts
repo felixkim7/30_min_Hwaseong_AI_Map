@@ -12,6 +12,17 @@ export const SCORE_WEIGHTS = {
   feasibility: 0.05,
 } as const;
 
+// Shared Korean labels for each factor — used anywhere a breakdown is shown
+// (admin cluster detail, clusters-debug, the policy report prompt).
+export const SCORE_FACTOR_LABELS: Record<keyof typeof SCORE_WEIGHTS, string> = {
+  recurrence: "반복도",
+  safety: "안전",
+  time_sensitivity: "시간 민감도",
+  vulnerable_impact: "교통약자 영향",
+  policy_alignment: "정책 부합도",
+  feasibility: "실현 가능성",
+};
+
 // A cluster with 10+ reports is treated as maximally recurrent for the demo.
 const RECURRENCE_CAP = 10;
 
