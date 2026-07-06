@@ -66,4 +66,28 @@ export const copy = {
     title: "등록된 제보 목록 (임시 확인용)",
     empty: "아직 등록된 제보가 없습니다.",
   },
+  map: {
+    title: "교통불편 지도",
+    subtitle: "화성시 시민들이 제보한 교통 불편을 지도에서 확인하세요.",
+    filters: {
+      district: "지역",
+      transportMode: "교통수단",
+      timePattern: "시간대",
+      subCategory: "불편 유형",
+      all: "전체",
+      reset: "필터 초기화",
+    },
+    popup: {
+      severity: "체감 불편도",
+    },
+    topIssues: {
+      title: "현재 가장 많이 제보된 이슈 TOP 5",
+      countSuffix: "건",
+      empty: "아직 집계할 이슈가 없습니다.",
+    },
+    empty: "아직 제보가 없습니다.",
+    loading: "지도를 불러오는 중...",
+    loadError: "제보 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+    resultCount: "건의 제보가 지도에 표시되고 있습니다.",
+  },
 } as const;
