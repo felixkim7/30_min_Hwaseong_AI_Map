@@ -24,6 +24,29 @@ export function ReportReview({
   onEdit: () => void;
 }) {
   const [confirmed, setConfirmed] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  async function handleConfirm() {
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(analysis),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.error ?? copy.review.saveError);
+      }
+      setConfirmed(true);
+    } catch {
+      setSaveError(copy.review.saveError);
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   return (
     <div className="flex flex-1 flex-col items-center bg-zinc-50 px-4 py-10 dark:bg-black sm:px-6">
@@ -117,26 +140,43 @@ export function ReportReview({
 
         <div className="flex flex-col gap-3">
           {confirmed ? (
-            <p className="rounded-lg bg-emerald-50 p-3 text-center text-sm text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-              {copy.review.confirmStubNotice}
-            </p>
-          ) : (
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={onEdit}
-                className="flex h-12 w-full items-center justify-center rounded-full border border-zinc-300 text-base font-medium text-zinc-900 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
+            <div className="flex flex-col gap-3 rounded-lg bg-emerald-50 p-4 text-center dark:bg-emerald-950/40">
+              <p className="text-sm text-emerald-700 dark:text-emerald-300">
+                {copy.review.saveSuccess}
+              </p>
+              <Link
+                href="/"
+                className="mx-auto flex h-10 w-fit items-center justify-center rounded-full bg-zinc-900 px-6 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
               >
-                {copy.review.edit}
-              </button>
-              <button
-                type="button"
-                onClick={() => setConfirmed(true)}
-                className="flex h-12 w-full items-center justify-center rounded-full bg-zinc-900 text-base font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
-              >
-                {copy.review.confirm}
-              </button>
+                {copy.appName}
+              </Link>
             </div>
+          ) : (
+            <>
+              {saveError && (
+                <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
+                  {saveError}
+                </p>
+              )}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={onEdit}
+                  disabled={isSaving}
+                  className="flex h-12 w-full items-center justify-center rounded-full border border-zinc-300 text-base font-medium text-zinc-900 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
+                >
+                  {copy.review.edit}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => void handleConfirm()}
+                  disabled={isSaving}
+                  className="flex h-12 w-full items-center justify-center rounded-full bg-zinc-900 text-base font-medium text-white transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                >
+                  {isSaving ? copy.review.saving : copy.review.confirm}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </main>
