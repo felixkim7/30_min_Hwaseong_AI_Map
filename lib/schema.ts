@@ -107,3 +107,41 @@ export const savedReportSchema = reportAnalysisSchema.extend({
 });
 
 export type SavedReport = z.infer<typeof savedReportSchema>;
+
+// Per-factor breakdown behind a cluster's priority_score. Each factor is
+// 0-1; the UI shows these raw so the score is never a black box (see
+// lib/scoring.ts and ARCHITECTURE.md's "Priority score" section).
+export const scoreBreakdownSchema = z.object({
+  recurrence: z.number().min(0).max(1),
+  safety: z.number().min(0).max(1),
+  time_sensitivity: z.number().min(0).max(1),
+  vulnerable_impact: z.number().min(0).max(1),
+  policy_alignment: z.number().min(0).max(1),
+  feasibility: z.number().min(0).max(1),
+  weights: z.object({
+    recurrence: z.number(),
+    safety: z.number(),
+    time_sensitivity: z.number(),
+    vulnerable_impact: z.number(),
+    policy_alignment: z.number(),
+    feasibility: z.number(),
+  }),
+});
+
+export type ScoreBreakdown = z.infer<typeof scoreBreakdownSchema>;
+
+// A full row as stored in and returned from Supabase `clusters`.
+export const clusterSchema = z.object({
+  id: z.uuid(),
+  created_at: z.string(),
+  updated_at: z.string(),
+  title: z.string(),
+  summary: z.string().nullable(),
+  district: z.string().nullable(),
+  report_count: z.number().int(),
+  representative_report_id: z.uuid().nullable(),
+  priority_score: z.number().nullable(),
+  score_breakdown: scoreBreakdownSchema.nullable(),
+});
+
+export type Cluster = z.infer<typeof clusterSchema>;

@@ -66,6 +66,13 @@ export const copy = {
     title: "등록된 제보 목록 (임시 확인용)",
     empty: "아직 등록된 제보가 없습니다.",
   },
+  clustersDebug: {
+    title: "클러스터 및 우선순위 점수 (임시 확인용)",
+    empty: "아직 생성된 클러스터가 없습니다.",
+    scoreLabel: "우선순위 점수",
+    reportCountLabel: "제보 건수",
+    breakdownTitle: "점수 세부 내역 (가중치)",
+  },
   map: {
     title: "교통불편 지도",
     subtitle: "화성시 시민들이 제보한 교통 불편을 지도에서 확인하세요.",
