@@ -5,22 +5,35 @@ import { z } from "zod";
 // live testing (2026-07). Docs: https://www.gbis.go.kr/gbis2014/publicService.action?cmd=mBusArrival
 const BASE_URL = "https://apis.data.go.kr/6410000/busarrivalservice/v2";
 
+// GBIS uses "" (empty string) as a sentinel for "no second bus tracked" on
+// slot-2 fields (and occasionally slot-1 when nothing is currently running),
+// instead of omitting the field or using null/0. Normalize "" -> null before
+// validating the real type.
+const nullableNumber = z.preprocess(
+  (v) => (v === "" ? null : v),
+  z.number().nullable().optional()
+);
+const nullableString = z.preprocess(
+  (v) => (v === "" ? null : v),
+  z.string().nullable().optional()
+);
+
 const gbisArrivalItemSchema = z.object({
   stationId: z.number(),
   routeId: z.number(),
-  routeName: z.string(),
+  routeName: z.union([z.string(), z.number()]).transform(String),
   staOrder: z.number(),
   flag: z.string(), // "RUN" | "PASS" | "STOP" | "WAIT" | ...
-  predictTime1: z.number().nullable().optional(),
-  predictTimeSec1: z.number().nullable().optional(),
-  predictTime2: z.number().nullable().optional(),
-  predictTimeSec2: z.number().nullable().optional(),
-  remainSeatCnt1: z.number().nullable().optional(),
-  remainSeatCnt2: z.number().nullable().optional(),
-  crowded1: z.number().nullable().optional(),
-  crowded2: z.number().nullable().optional(),
-  stationNm1: z.string().nullable().optional(),
-  stationNm2: z.string().nullable().optional(),
+  predictTime1: nullableNumber,
+  predictTimeSec1: nullableNumber,
+  predictTime2: nullableNumber,
+  predictTimeSec2: nullableNumber,
+  remainSeatCnt1: nullableNumber,
+  remainSeatCnt2: nullableNumber,
+  crowded1: nullableNumber,
+  crowded2: nullableNumber,
+  stationNm1: nullableString,
+  stationNm2: nullableString,
 });
 
 const gbisResponseSchema = z.object({

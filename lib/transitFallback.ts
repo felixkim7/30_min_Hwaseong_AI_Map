@@ -5,29 +5,27 @@ import type { GbisArrivalItem } from "@/lib/gbis";
 // snapshot instead of failing outright. The UI must always label this
 // clearly as cached, never pass it off as live.
 //
-// TODO: replace stationId/routeId with a confirmed Hwaseong-area stop once
-// the GBIS station-search API application is approved and we've looked up a
-// real stop near a reported cluster (e.g. 동탄역 연계버스).
+// Captured live from 수영오거리.방송통신대입구 (화성시 봉담읍), route H103.
 export const TRANSIT_FALLBACK_SNAPSHOT: {
   capturedAt: string;
   item: GbisArrivalItem;
 } = {
-  capturedAt: "2026-07-06T20:17:16+09:00",
+  capturedAt: "2026-07-06T20:58:25+09:00",
   item: {
-    stationId: 200000186,
-    routeId: 200000078,
-    routeName: "62-1",
-    staOrder: 55,
+    stationId: 233000839,
+    routeId: 233000331,
+    routeName: "H103",
+    staOrder: 62,
     flag: "PASS",
     predictTime1: 6,
-    predictTimeSec1: 456,
-    predictTime2: 22,
-    predictTimeSec2: 1336,
+    predictTimeSec1: 353,
+    predictTime2: null,
+    predictTimeSec2: null,
     remainSeatCnt1: 0,
     remainSeatCnt2: 0,
     crowded1: 1,
-    crowded2: 1,
-    stationNm1: "팔달구청.화성행궁.수원성지",
-    stationNm2: "매탄2동주민센터",
+    crowded2: 0,
+    stationNm1: "서수원주민편익시설",
+    stationNm2: null,
   },
 };
