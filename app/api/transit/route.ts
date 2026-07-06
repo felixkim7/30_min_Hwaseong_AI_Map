@@ -1,50 +1,84 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { fetchBusArrival, GbisApiError, type GbisArrivalItem } from "@/lib/gbis";
+import {
+  fetchBusArrival,
+  fetchRoutesAtStation,
+  GbisApiError,
+  type GbisArrivalItem,
+} from "@/lib/gbis";
 import { TRANSIT_FALLBACK_SNAPSHOT } from "@/lib/transitFallback";
 
 // Simple in-memory TTL cache — good enough for a single-instance demo
 // deployment. Avoids hammering the upstream GBIS API on every page view.
 const CACHE_TTL_MS = 60 * 1000;
-const cache = new Map<string, { item: GbisArrivalItem; cachedAt: number }>();
+const cache = new Map<string, { items: GbisArrivalItem[]; cachedAt: number }>();
 
 export type TransitResponse = {
   source: "live" | "cached_fallback";
   fetched_at: string;
-  item: GbisArrivalItem;
+  items: GbisArrivalItem[];
 };
+
+async function fetchAllArrivalsForStation(
+  stationId: string
+): Promise<GbisArrivalItem[]> {
+  const routes = await fetchRoutesAtStation(stationId);
+  if (routes.length === 0) {
+    throw new GbisApiError("No routes found for this station.");
+  }
+
+  const results = await Promise.allSettled(
+    routes.map((route) =>
+      fetchBusArrival({
+        stationId,
+        routeId: String(route.routeId),
+        staOrder: String(route.staOrder),
+      })
+    )
+  );
+
+  const items = results
+    .filter(
+      (r): r is PromiseFulfilledResult<GbisArrivalItem> =>
+        r.status === "fulfilled"
+    )
+    .map((r) => r.value);
+
+  if (items.length === 0) {
+    throw new GbisApiError("No arrival data available for any route.");
+  }
+
+  return items;
+}
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const stationId = searchParams.get("stationId");
-  const routeId = searchParams.get("routeId");
-  const staOrder = searchParams.get("staOrder") ?? "1";
 
-  if (!stationId || !routeId) {
+  if (!stationId) {
     return NextResponse.json(
-      { error: "stationId와 routeId가 필요합니다." },
+      { error: "stationId가 필요합니다." },
       { status: 400 }
     );
   }
 
-  const cacheKey = `${stationId}:${routeId}:${staOrder}`;
-  const cached = cache.get(cacheKey);
+  const cached = cache.get(stationId);
   if (cached && Date.now() - cached.cachedAt < CACHE_TTL_MS) {
     const body: TransitResponse = {
       source: "live",
       fetched_at: new Date(cached.cachedAt).toISOString(),
-      item: cached.item,
+      items: cached.items,
     };
     return NextResponse.json(body);
   }
 
   try {
-    const item = await fetchBusArrival({ stationId, routeId, staOrder });
-    cache.set(cacheKey, { item, cachedAt: Date.now() });
+    const items = await fetchAllArrivalsForStation(stationId);
+    cache.set(stationId, { items, cachedAt: Date.now() });
     const body: TransitResponse = {
       source: "live",
       fetched_at: new Date().toISOString(),
-      item,
+      items,
     };
     return NextResponse.json(body);
   } catch (error) {
@@ -53,7 +87,7 @@ export async function GET(request: Request) {
       const body: TransitResponse = {
         source: "cached_fallback",
         fetched_at: TRANSIT_FALLBACK_SNAPSHOT.capturedAt,
-        item: TRANSIT_FALLBACK_SNAPSHOT.item,
+        items: TRANSIT_FALLBACK_SNAPSHOT.items,
       };
       return NextResponse.json(body);
     }

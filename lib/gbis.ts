@@ -1,9 +1,10 @@
 import "server-only";
 import { z } from "zod";
 
-// 경기버스정보(GBIS) bus arrival API — confirmed working endpoint/params via
-// live testing (2026-07). Docs: https://www.gbis.go.kr/gbis2014/publicService.action?cmd=mBusArrival
-const BASE_URL = "https://apis.data.go.kr/6410000/busarrivalservice/v2";
+// 경기버스정보(GBIS) APIs — confirmed working endpoints/params via live
+// testing (2026-07). Docs: https://www.gbis.go.kr/gbis2014/publicService.action
+const ARRIVAL_BASE_URL = "https://apis.data.go.kr/6410000/busarrivalservice/v2";
+const STATION_BASE_URL = "https://apis.data.go.kr/6410000/busstationservice/v2";
 
 // GBIS uses "" (empty string) as a sentinel for "no second bus tracked" on
 // slot-2 fields (and occasionally slot-1 when nothing is currently running),
@@ -52,7 +53,42 @@ const gbisResponseSchema = z.object({
 
 export type GbisArrivalItem = z.infer<typeof gbisArrivalItemSchema>;
 
+const gbisRouteAtStationSchema = z.object({
+  routeId: z.number(),
+  routeName: z.union([z.string(), z.number()]).transform(String),
+  routeTypeName: z.string().nullable().optional(),
+  routeDestName: z.string().nullable().optional(),
+  staOrder: z.number(),
+  regionName: z.string().nullable().optional(),
+});
+
+const gbisStationRouteResponseSchema = z.object({
+  response: z.object({
+    msgHeader: z.object({
+      resultCode: z.number(),
+      resultMessage: z.string(),
+    }),
+    msgBody: z
+      .object({
+        busRouteList: z
+          .union([z.array(gbisRouteAtStationSchema), gbisRouteAtStationSchema])
+          .optional(),
+      })
+      .optional(),
+  }),
+});
+
+export type GbisRouteAtStation = z.infer<typeof gbisRouteAtStationSchema>;
+
 export class GbisApiError extends Error {}
+
+function getApiKey(): string {
+  const apiKey = process.env.GYEONGGI_DATA_API_KEY;
+  if (!apiKey) {
+    throw new GbisApiError("GYEONGGI_DATA_API_KEY is not set.");
+  }
+  return apiKey;
+}
 
 /**
  * Fetches live arrival info for one bus route at one stop. Server-only —
@@ -63,13 +99,8 @@ export async function fetchBusArrival(params: {
   routeId: string;
   staOrder: string;
 }): Promise<GbisArrivalItem> {
-  const apiKey = process.env.GYEONGGI_DATA_API_KEY;
-  if (!apiKey) {
-    throw new GbisApiError("GYEONGGI_DATA_API_KEY is not set.");
-  }
-
-  const url = new URL(`${BASE_URL}/getBusArrivalItemv2`);
-  url.searchParams.set("serviceKey", apiKey);
+  const url = new URL(`${ARRIVAL_BASE_URL}/getBusArrivalItemv2`);
+  url.searchParams.set("serviceKey", getApiKey());
   url.searchParams.set("stationId", params.stationId);
   url.searchParams.set("routeId", params.routeId);
   url.searchParams.set("staOrder", params.staOrder);
@@ -97,4 +128,36 @@ export async function fetchBusArrival(params: {
   }
 
   return item;
+}
+
+/**
+ * Fetches every bus route that stops at a given station. Server-only.
+ */
+export async function fetchRoutesAtStation(
+  stationId: string
+): Promise<GbisRouteAtStation[]> {
+  const url = new URL(`${STATION_BASE_URL}/getBusStationViaRouteListv2`);
+  url.searchParams.set("serviceKey", getApiKey());
+  url.searchParams.set("stationId", stationId);
+  url.searchParams.set("format", "json");
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    throw new GbisApiError(`GBIS API returned HTTP ${res.status}`);
+  }
+
+  const raw = await res.json();
+  const parsed = gbisStationRouteResponseSchema.safeParse(raw);
+  if (!parsed.success) {
+    throw new GbisApiError("GBIS API returned an unexpected shape.");
+  }
+
+  const { resultCode, resultMessage } = parsed.data.response.msgHeader;
+  if (resultCode !== 0) {
+    throw new GbisApiError(`GBIS API error ${resultCode}: ${resultMessage}`);
+  }
+
+  const list = parsed.data.response.msgBody?.busRouteList;
+  if (!list) return [];
+  return Array.isArray(list) ? list : [list];
 }

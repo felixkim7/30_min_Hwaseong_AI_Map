@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { copy } from "@/lib/copy";
 import type { TransitResponse } from "@/app/api/transit/route";
+import type { GbisArrivalItem } from "@/lib/gbis";
 
 function formatMinutes(seconds: number | null | undefined): string | null {
   if (seconds == null) return null;
@@ -15,15 +16,54 @@ function crowdedLabel(level: number | null | undefined): string | null {
   return copy.admin.transitEvidence.crowdedLevels[level - 1];
 }
 
+function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
+  return (
+    <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900">
+      <div className="flex flex-wrap items-baseline gap-2">
+        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+          {copy.admin.transitEvidence.routeLabel} {item.routeName}
+        </span>
+        <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          {item.stationNm1 ?? item.stationId}
+        </span>
+      </div>
+      <div className="mt-1 grid grid-cols-2 gap-3 text-sm">
+        <div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {copy.admin.transitEvidence.arrival1}
+          </p>
+          <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+            {formatMinutes(item.predictTimeSec1) ?? "-"}
+          </p>
+          {crowdedLabel(item.crowded1) && (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {copy.admin.transitEvidence.crowdedLabel}: {crowdedLabel(item.crowded1)}
+            </p>
+          )}
+        </div>
+        <div>
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {copy.admin.transitEvidence.arrival2}
+          </p>
+          <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+            {formatMinutes(item.predictTimeSec2) ?? "-"}
+          </p>
+          {crowdedLabel(item.crowded2) && (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {copy.admin.transitEvidence.crowdedLabel}: {crowdedLabel(item.crowded2)}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TransitEvidence({
   stationId,
-  routeId,
-  staOrder,
   note,
 }: {
   stationId: string;
-  routeId: string;
-  staOrder: string;
   note: string;
 }) {
   const [data, setData] = useState<TransitResponse | null>(null);
@@ -31,9 +71,7 @@ export function TransitEvidence({
 
   useEffect(() => {
     let cancelled = false;
-    fetch(
-      `/api/transit?stationId=${stationId}&routeId=${routeId}&staOrder=${staOrder}`
-    )
+    fetch(`/api/transit?stationId=${stationId}`)
       .then((res) => {
         if (!res.ok) throw new Error("failed");
         return res.json();
@@ -47,7 +85,7 @@ export function TransitEvidence({
     return () => {
       cancelled = true;
     };
-  }, [stationId, routeId, staOrder]);
+  }, [stationId]);
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
@@ -84,45 +122,10 @@ export function TransitEvidence({
 
       {data && (
         <div className="flex flex-col gap-2">
-          <div className="flex flex-wrap gap-2 text-sm text-zinc-800 dark:text-zinc-200">
-            <span className="font-medium">
-              {copy.admin.transitEvidence.routeLabel} {data.item.routeName}
-            </span>
-            <span>·</span>
-            <span>
-              {copy.admin.transitEvidence.stationLabel}{" "}
-              {data.item.stationNm1 ?? data.item.stationId}
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
-            <div className="rounded-lg bg-zinc-50 p-2 dark:bg-zinc-900">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {copy.admin.transitEvidence.arrival1}
-              </p>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">
-                {formatMinutes(data.item.predictTimeSec1) ?? "-"}
-              </p>
-              {crowdedLabel(data.item.crowded1) && (
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {copy.admin.transitEvidence.crowdedLabel}:{" "}
-                  {crowdedLabel(data.item.crowded1)}
-                </p>
-              )}
-            </div>
-            <div className="rounded-lg bg-zinc-50 p-2 dark:bg-zinc-900">
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {copy.admin.transitEvidence.arrival2}
-              </p>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100">
-                {formatMinutes(data.item.predictTimeSec2) ?? "-"}
-              </p>
-              {crowdedLabel(data.item.crowded2) && (
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {copy.admin.transitEvidence.crowdedLabel}:{" "}
-                  {crowdedLabel(data.item.crowded2)}
-                </p>
-              )}
-            </div>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {data.items.map((item) => (
+              <RouteArrivalCard key={item.routeId} item={item} />
+            ))}
           </div>
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
             {new Date(data.fetched_at).toLocaleString("ko-KR")}
