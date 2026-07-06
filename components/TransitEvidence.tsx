@@ -19,14 +19,9 @@ function crowdedLabel(level: number | null | undefined): string | null {
 function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
   return (
     <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900">
-      <div className="flex flex-wrap items-baseline gap-2">
-        <span className="font-medium text-zinc-900 dark:text-zinc-100">
-          {copy.admin.transitEvidence.routeLabel} {item.routeName}
-        </span>
-        <span className="text-xs text-zinc-500 dark:text-zinc-400">
-          {item.stationNm1 ?? item.stationId}
-        </span>
-      </div>
+      <span className="font-medium text-zinc-900 dark:text-zinc-100">
+        {copy.admin.transitEvidence.routeLabel} {item.routeName}
+      </span>
       <div className="mt-1 grid grid-cols-2 gap-3 text-sm">
         <div>
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
@@ -35,6 +30,11 @@ function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
           <p className="font-semibold text-zinc-900 dark:text-zinc-100">
             {formatMinutes(item.predictTimeSec1) ?? "-"}
           </p>
+          {item.stationNm1 && (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {copy.admin.transitEvidence.currentLocationLabel}: {item.stationNm1}
+            </p>
+          )}
           {crowdedLabel(item.crowded1) && (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {copy.admin.transitEvidence.crowdedLabel}: {crowdedLabel(item.crowded1)}
@@ -48,6 +48,11 @@ function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
           <p className="font-semibold text-zinc-900 dark:text-zinc-100">
             {formatMinutes(item.predictTimeSec2) ?? "-"}
           </p>
+          {item.stationNm2 && (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {copy.admin.transitEvidence.currentLocationLabel}: {item.stationNm2}
+            </p>
+          )}
           {crowdedLabel(item.crowded2) && (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {copy.admin.transitEvidence.crowdedLabel}: {crowdedLabel(item.crowded2)}
@@ -61,9 +66,11 @@ function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
 
 export function TransitEvidence({
   stationId,
+  stationName,
   note,
 }: {
   stationId: string;
+  stationName: string;
   note: string;
 }) {
   const [data, setData] = useState<TransitResponse | null>(null);
@@ -107,6 +114,10 @@ export function TransitEvidence({
           </span>
         )}
       </div>
+
+      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        {copy.admin.transitEvidence.stationLabel}: {stationName}
+      </p>
 
       {error && (
         <p className="text-sm text-red-600 dark:text-red-400">

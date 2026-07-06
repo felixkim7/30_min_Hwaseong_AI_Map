@@ -136,6 +136,7 @@ export default async function ClusterDetailPage({
       {transitEvidence && (
         <TransitEvidence
           stationId={transitEvidence.stationId}
+          stationName={transitEvidence.stationName}
           note={transitEvidence.note}
         />
       )}

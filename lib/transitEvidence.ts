@@ -10,6 +10,7 @@
 type TransitEvidenceConfig = {
   clusterTitleIncludes: string;
   stationId: string;
+  stationName: string;
   note: string;
 };
 
@@ -17,7 +18,8 @@ export const TRANSIT_EVIDENCE_CONFIG: TransitEvidenceConfig[] = [
   {
     clusterTitleIncludes: "버스",
     stationId: "233000839",
-    note: "※ 수영오거리.방송통신대입구 정류소(화성시 봉담읍)를 지나는 모든 노선의 실시간 도착정보입니다.",
+    stationName: "수영오거리.방송통신대입구 (화성시 봉담읍)",
+    note: "※ 이 정류소를 지나는 모든 노선의 실시간 도착정보입니다. 노선 카드에 표시되는 위치는 정류소명이 아니라 현재 버스가 지나고 있는 위치입니다.",
   },
 ];
 
