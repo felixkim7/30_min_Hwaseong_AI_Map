@@ -86,3 +86,24 @@ export const analyzeRequestSchema = z.object({
 });
 
 export type AnalyzeRequest = z.infer<typeof analyzeRequestSchema>;
+
+export const statusOptions = ["new", "clustered", "reviewed"] as const;
+
+// POST /api/reports body — the AI analysis the citizen confirmed (and may
+// have edited) on the review screen. No raw description, ever.
+export const createReportSchema = reportAnalysisSchema;
+
+export type CreateReportInput = z.infer<typeof createReportSchema>;
+
+// A full row as stored in and returned from Supabase `reports`.
+export const savedReportSchema = reportAnalysisSchema.extend({
+  id: z.uuid(),
+  created_at: z.string(),
+  lat: z.number().nullable(),
+  lng: z.number().nullable(),
+  district: z.string().nullable(),
+  cluster_id: z.uuid().nullable(),
+  status: z.enum(statusOptions),
+});
+
+export type SavedReport = z.infer<typeof savedReportSchema>;

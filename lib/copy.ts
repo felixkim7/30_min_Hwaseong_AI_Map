@@ -58,7 +58,12 @@ export const copy = {
     suggestedPoliciesLabel: "AI 정책 제안 (참고용)",
     confirm: "이대로 등록",
     edit: "수정하기",
-    confirmStubNotice:
-      "등록 기능은 다음 단계(phase 03)에서 실제로 저장됩니다. 지금은 데모용 확인 화면입니다.",
+    saving: "저장 중...",
+    saveSuccess: "제보가 등록되었습니다. 소중한 의견 감사합니다!",
+    saveError: "제보 저장에 실패했습니다. 잠시 후 다시 시도해주세요.",
+  },
+  reportsList: {
+    title: "등록된 제보 목록 (임시 확인용)",
+    empty: "아직 등록된 제보가 없습니다.",
   },
 } as const;
