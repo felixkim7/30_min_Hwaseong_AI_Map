@@ -8,8 +8,11 @@ import {
   timePatternOptions,
   transportModeOptions,
   targetGroupOptions,
+  reportAnalysisSchema,
   type ReportInput,
+  type ReportAnalysis,
 } from "@/lib/schema";
+import { ReportReview } from "@/components/ReportReview";
 
 type FormState = {
   description: string;
@@ -34,7 +37,10 @@ type FieldErrors = Partial<Record<keyof FormState, string>>;
 export default function ReportPage() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<FieldErrors>({});
-  const [preview, setPreview] = useState<ReportInput | null>(null);
+  const [analysis, setAnalysis] = useState<ReportAnalysis | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analyzeError, setAnalyzeError] = useState<string | null>(null);
+  const [lastPayload, setLastPayload] = useState<ReportInput | null>(null);
 
   function toggleTargetGroup(group: string) {
     setForm((prev) => ({
@@ -43,6 +49,28 @@ export default function ReportPage() {
         ? prev.targetGroups.filter((g) => g !== group)
         : [...prev.targetGroups, group],
     }));
+  }
+
+  async function runAnalysis(payload: ReportInput) {
+    setIsAnalyzing(true);
+    setAnalyzeError(null);
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.error ?? copy.report.analyzeError);
+      }
+      const parsed = reportAnalysisSchema.parse(data);
+      setAnalysis(parsed);
+    } catch {
+      setAnalyzeError(copy.report.analyzeError);
+    } finally {
+      setIsAnalyzing(false);
+    }
   }
 
   function handleSubmit(e: FormEvent) {
@@ -64,13 +92,21 @@ export default function ReportPage() {
         if (!nextErrors[key]) nextErrors[key] = issue.message;
       }
       setErrors(nextErrors);
-      setPreview(null);
       return;
     }
 
     setErrors({});
-    setPreview(result.data);
-    console.log("ReportInput payload:", result.data);
+    setLastPayload(result.data);
+    void runAnalysis(result.data);
+  }
+
+  function handleEdit() {
+    setAnalysis(null);
+    setAnalyzeError(null);
+  }
+
+  if (analysis) {
+    return <ReportReview analysis={analysis} onEdit={handleEdit} />;
   }
 
   return (
@@ -288,29 +324,29 @@ export default function ReportPage() {
             </p>
           </div>
 
+          {analyzeError && (
+            <div className="flex flex-col gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700 dark:bg-red-950/40 dark:text-red-300">
+              <p>{analyzeError}</p>
+              {lastPayload && (
+                <button
+                  type="button"
+                  onClick={() => void runAnalysis(lastPayload)}
+                  className="w-fit rounded-full border border-red-300 px-3 py-1 text-xs font-medium hover:bg-red-100 dark:border-red-700 dark:hover:bg-red-900/40"
+                >
+                  {copy.report.retry}
+                </button>
+              )}
+            </div>
+          )}
+
           <button
             type="submit"
-            className="mt-2 flex h-12 w-full items-center justify-center rounded-full bg-zinc-900 text-base font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+            disabled={isAnalyzing}
+            className="mt-2 flex h-12 w-full items-center justify-center rounded-full bg-zinc-900 text-base font-medium text-white transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
           >
-            {copy.report.submit}
+            {isAnalyzing ? copy.report.analyzing : copy.report.submit}
           </button>
         </form>
-
-        {preview && (
-          <div className="flex flex-col gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800 sm:p-6">
-            <div>
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                {copy.report.previewTitle}
-              </h2>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                {copy.report.previewHint}
-              </p>
-            </div>
-            <pre className="overflow-x-auto whitespace-pre-wrap break-words rounded-lg bg-zinc-100 p-3 text-xs text-zinc-800 dark:bg-zinc-900 dark:text-zinc-200">
-              {JSON.stringify(preview, null, 2)}
-            </pre>
-          </div>
-        )}
       </main>
     </div>
   );
