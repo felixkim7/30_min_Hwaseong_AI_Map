@@ -9,4 +9,37 @@ export const copy = {
     reportCta: "교통불편 제보하기",
     mapCta: "교통불편 지도 보기",
   },
+  report: {
+    title: "교통불편 제보하기",
+    subtitle: "겪으신 교통 불편을 자유롭게 적어주시면 AI가 정리해드립니다.",
+    descriptionLabel: "어떤 교통 불편을 겪으셨나요?",
+    descriptionPlaceholder:
+      "예) 매일 아침 8시쯤 이 정류장에서 버스를 15분 넘게 기다려요. 배차 간격이 너무 길어요.",
+    locationLabel: "위치/장소명",
+    locationPlaceholder: "예) 동탄역 2번 출구 버스정류장",
+    timePatternLabel: "자주 발생하는 시간대",
+    timePatternPlaceholder: "선택해주세요",
+    transportModeLabel: "교통수단",
+    transportModePlaceholder: "선택해주세요",
+    targetGroupsLabel: "이용자 유형 (해당되는 항목 모두 선택, 선택사항)",
+    severityLabel: "체감 불편도",
+    severityHint: "1 (약함) ~ 5 (심각)",
+    photoLabel: "사진 첨부 (선택사항)",
+    photoHint: "현재는 미리보기만 지원되며, 실제 업로드는 추후 지원됩니다.",
+    submit: "제보 내용 확인하기",
+    submitting: "처리 중...",
+    previewTitle: "제출될 내용 미리보기",
+    previewHint:
+      "아직 저장되지 않았습니다. AI 분석 및 저장 기능은 다음 단계에서 연결됩니다.",
+    errors: {
+      description: {
+        required: "어떤 교통 불편을 겪으셨는지 입력해주세요.",
+        min: "10자 이상 입력해주세요.",
+        max: "2000자 이하로 입력해주세요.",
+      },
+      locationName: "위치/장소명을 입력해주세요.",
+      timePattern: "자주 발생하는 시간대를 선택해주세요.",
+      transportMode: "교통수단을 선택해주세요.",
+    },
+  },
 } as const;
