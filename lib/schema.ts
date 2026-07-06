@@ -25,6 +25,16 @@ export const targetGroupOptions = [
   "보호자",
 ] as const;
 
+export const subCategoryOptions = [
+  "버스 배차",
+  "환승",
+  "심야귀가",
+  "도로정체",
+  "보행안전",
+  "교통약자",
+  "기타",
+] as const;
+
 // Raw shape of the citizen-facing form. AI-derived fields (category, summary,
 // suggested_policies, etc. — see ARCHITECTURE.md) are added on top of this in
 // phase 02, after /api/analyze runs.
@@ -46,3 +56,33 @@ export const reportInputSchema = z.object({
 });
 
 export type ReportInput = z.infer<typeof reportInputSchema>;
+
+// AI output from POST /api/analyze. Extends the citizen's raw input with
+// structured classification + masked text. Never store the raw `description`
+// — only `masked_text` may be persisted (phase 03).
+export const reportAnalysisSchema = z.object({
+  masked_text: z.string().min(1),
+  category: z.literal("교통"),
+  sub_category: z.enum(subCategoryOptions),
+  problem_types: z.array(z.string()).default([]),
+  location_name: z.string().min(1),
+  time_pattern: z.enum(timePatternOptions),
+  transport_mode: z.enum(transportModeOptions),
+  severity: z.number().int().min(1).max(5),
+  target_groups: z.array(z.enum(targetGroupOptions)).default([]),
+  summary: z.string().min(1),
+  suggested_policies: z.array(z.string()).default([]),
+});
+
+export type ReportAnalysis = z.infer<typeof reportAnalysisSchema>;
+
+export const analyzeRequestSchema = z.object({
+  description: z.string().trim().min(10).max(2000),
+  locationName: z.string().trim().min(1),
+  timePattern: z.enum(timePatternOptions),
+  transportMode: z.enum(transportModeOptions),
+  targetGroups: z.array(z.enum(targetGroupOptions)).default([]),
+  severity: z.number().int().min(1).max(5).default(3),
+});
+
+export type AnalyzeRequest = z.infer<typeof analyzeRequestSchema>;

@@ -27,10 +27,6 @@ export const copy = {
     photoLabel: "사진 첨부 (선택사항)",
     photoHint: "현재는 미리보기만 지원되며, 실제 업로드는 추후 지원됩니다.",
     submit: "제보 내용 확인하기",
-    submitting: "처리 중...",
-    previewTitle: "제출될 내용 미리보기",
-    previewHint:
-      "아직 저장되지 않았습니다. AI 분석 및 저장 기능은 다음 단계에서 연결됩니다.",
     errors: {
       description: {
         required: "어떤 교통 불편을 겪으셨는지 입력해주세요.",
@@ -41,5 +37,28 @@ export const copy = {
       timePattern: "자주 발생하는 시간대를 선택해주세요.",
       transportMode: "교통수단을 선택해주세요.",
     },
+    analyzing: "AI가 제보 내용을 분석하고 있어요...",
+    analyzeError:
+      "AI 분석에 실패했습니다. 잠시 후 다시 시도해주세요. 문제가 계속되면 관리자에게 문의해주세요.",
+    retry: "다시 시도",
+  },
+  review: {
+    title: "제보 내용 확인",
+    subtitle:
+      "AI가 정리한 내용이에요. 개인정보는 자동으로 가려졌습니다. 이대로 등록하거나 다시 작성해주세요.",
+    maskedTextLabel: "정리된 제보 내용 (개인정보 마스킹 완료)",
+    summaryLabel: "AI 한줄 요약",
+    subCategoryLabel: "세부 유형",
+    problemTypesLabel: "문제 유형",
+    locationLabel: "위치/장소명",
+    timePatternLabel: "시간대",
+    transportModeLabel: "교통수단",
+    severityLabel: "체감 불편도",
+    targetGroupsLabel: "이용자 유형",
+    suggestedPoliciesLabel: "AI 정책 제안 (참고용)",
+    confirm: "이대로 등록",
+    edit: "수정하기",
+    confirmStubNotice:
+      "등록 기능은 다음 단계(phase 03)에서 실제로 저장됩니다. 지금은 데모용 확인 화면입니다.",
   },
 } as const;
