@@ -2,16 +2,7 @@ import Link from "next/link";
 import { copy } from "@/lib/copy";
 import { supabaseServer } from "@/lib/supabase/server";
 import { clusterSchema } from "@/lib/schema";
-import { SCORE_WEIGHTS } from "@/lib/scoring";
-
-const FACTOR_LABELS: Record<keyof typeof SCORE_WEIGHTS, string> = {
-  recurrence: "반복도",
-  safety: "안전",
-  time_sensitivity: "시간 민감도",
-  vulnerable_impact: "교통약자 영향",
-  policy_alignment: "정책 부합도",
-  feasibility: "실현 가능성",
-};
+import { SCORE_FACTOR_LABELS as FACTOR_LABELS } from "@/lib/scoring";
 
 // Temporary confirmation view for phase 05 — proves /api/cluster and
 // /api/score work end-to-end. Superseded by the real admin dashboard in

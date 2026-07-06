@@ -145,3 +145,17 @@ export const clusterSchema = z.object({
 });
 
 export type Cluster = z.infer<typeof clusterSchema>;
+
+// A full row as stored in and returned from Supabase `policy_reports`.
+export const policyReportSchema = z.object({
+  id: z.uuid(),
+  cluster_id: z.uuid(),
+  created_at: z.string(),
+  content_md: z.string().min(1),
+});
+
+export type PolicyReport = z.infer<typeof policyReportSchema>;
+
+export const createPolicyReportRequestSchema = z.object({
+  cluster_id: z.uuid(),
+});

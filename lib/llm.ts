@@ -19,18 +19,25 @@ function getOpenAIClient() {
  * Calls the configured LLM provider with a system + user prompt and returns
  * the raw text response. Callers are responsible for parsing/validating the
  * result (see app/api/analyze/route.ts). Server-only.
+ *
+ * `jsonMode` (default true) requests strict JSON output. OpenAI requires the
+ * literal word "json" to appear somewhere in the prompt when this is on —
+ * set it to false for free-form output (e.g. markdown reports).
  */
 export async function callLLM(params: {
   system: string;
   user: string;
+  jsonMode?: boolean;
 }): Promise<string> {
+  const jsonMode = params.jsonMode ?? true;
+
   switch (provider) {
     case "openai": {
       const client = getOpenAIClient();
       const completion = await client.chat.completions.create({
         model: "gpt-4o-mini",
         temperature: 0.2,
-        response_format: { type: "json_object" },
+        ...(jsonMode ? { response_format: { type: "json_object" as const } } : {}),
         messages: [
           { role: "system", content: params.system },
           { role: "user", content: params.user },
