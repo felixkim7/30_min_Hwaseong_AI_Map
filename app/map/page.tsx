@@ -36,6 +36,7 @@ export default function MapPage() {
   const [reports, setReports] = useState<SavedReport[] | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -45,7 +46,10 @@ export default function MapPage() {
         return res.json();
       })
       .then((data) => {
-        if (!cancelled) setReports(data.reports as SavedReport[]);
+        if (!cancelled) {
+          setReports(data.reports as SavedReport[]);
+          setLoadError(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setLoadError(true);
@@ -53,7 +57,7 @@ export default function MapPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [retryKey]);
 
   const plottedReports = useMemo<PlottedReport[]>(() => {
     if (!reports) return [];
@@ -163,8 +167,15 @@ export default function MapPage() {
       <div className="flex flex-1 flex-col gap-4 px-4 pb-6 sm:px-6 lg:flex-row">
         <div className="relative h-[420px] w-full shrink-0 overflow-hidden rounded-2xl ring-1 ring-zinc-200 dark:ring-zinc-800 lg:h-[600px] lg:flex-1">
           {loadError ? (
-            <div className="flex h-full items-center justify-center bg-white text-sm text-red-600 dark:bg-zinc-950 dark:text-red-400">
-              {copy.map.loadError}
+            <div className="flex h-full flex-col items-center justify-center gap-3 bg-white text-sm text-red-600 dark:bg-zinc-950 dark:text-red-400">
+              <p>{copy.map.loadError}</p>
+              <button
+                type="button"
+                onClick={() => setRetryKey((k) => k + 1)}
+                className="rounded-full border border-red-300 px-3 py-1 text-xs font-medium hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-950/40"
+              >
+                {copy.map.retry}
+              </button>
             </div>
           ) : reports === null ? (
             <div className="flex h-full items-center justify-center bg-white text-sm text-zinc-500 dark:bg-zinc-950 dark:text-zinc-400">

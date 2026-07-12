@@ -75,6 +75,7 @@ export function TransitEvidence({
 }) {
   const [data, setData] = useState<TransitResponse | null>(null);
   const [error, setError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -84,7 +85,10 @@ export function TransitEvidence({
         return res.json();
       })
       .then((json) => {
-        if (!cancelled) setData(json as TransitResponse);
+        if (!cancelled) {
+          setData(json as TransitResponse);
+          setError(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setError(true);
@@ -92,7 +96,7 @@ export function TransitEvidence({
     return () => {
       cancelled = true;
     };
-  }, [stationId]);
+  }, [stationId, retryKey]);
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
@@ -120,9 +124,18 @@ export function TransitEvidence({
       </p>
 
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {copy.admin.transitEvidence.error}
-        </p>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-red-600 dark:text-red-400">
+            {copy.admin.transitEvidence.error}
+          </p>
+          <button
+            type="button"
+            onClick={() => setRetryKey((k) => k + 1)}
+            className="w-fit rounded-full border border-red-300 px-3 py-1 text-xs font-medium hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-950/40"
+          >
+            {copy.admin.transitEvidence.retry}
+          </button>
+        </div>
       )}
 
       {!error && !data && (

@@ -76,6 +76,20 @@ async function requestGrouping(reports: SavedReport[]) {
   return result.groups;
 }
 
+// Asking the model to track indices across a large batch in one shot gets
+// less reliable as the batch grows — it's prone to skipping or duplicating
+// an index. Grouping only needs to see reports in local batches to find
+// duplicates in a demo-scale dataset, so cap each LLM call's input size.
+const MAX_BATCH_SIZE = 12;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const chunks: T[][] = [];
+  for (let i = 0; i < items.length; i += size) {
+    chunks.push(items.slice(i, i + size));
+  }
+  return chunks;
+}
+
 export async function POST() {
   const { data: unclustered, error: fetchError } = await supabaseServer
     .from("reports")
@@ -96,77 +110,87 @@ export async function POST() {
     return NextResponse.json({ clusters_created: 0, reports_clustered: 0 });
   }
 
-  let groups: Awaited<ReturnType<typeof requestGrouping>>;
-  try {
-    groups = await requestGrouping(reports);
-  } catch (firstError) {
+  const batches = chunk(reports, MAX_BATCH_SIZE);
+  let clustersCreated = 0;
+  let reportsClustered = 0;
+  let batchesFailed = 0;
+
+  for (const batch of batches) {
+    let groups: Awaited<ReturnType<typeof requestGrouping>>;
     try {
-      groups = await requestGrouping(reports);
-    } catch (secondError) {
-      console.error(
-        "POST /api/cluster: grouping failed twice",
-        firstError,
-        secondError
-      );
-      return NextResponse.json(
-        { error: "AI 클러스터링에 실패했습니다. 잠시 후 다시 시도해주세요." },
-        { status: 502 }
-      );
+      groups = await requestGrouping(batch);
+    } catch (firstError) {
+      try {
+        groups = await requestGrouping(batch);
+      } catch (secondError) {
+        console.error(
+          "POST /api/cluster: grouping failed twice for a batch",
+          firstError,
+          secondError
+        );
+        batchesFailed += 1;
+        continue;
+      }
+    }
+
+    for (const group of groups) {
+      const members = group.report_indices.map((idx) => batch[idx]);
+      const districts = members
+        .map((m) => m.district)
+        .filter((d): d is string => Boolean(d));
+      const district = districts[0] ?? null;
+
+      const { data: cluster, error: clusterError } = await supabaseServer
+        .from("clusters")
+        .insert({
+          title: group.title,
+          summary: group.summary,
+          district,
+          report_count: members.length,
+          representative_report_id: members[0].id,
+        })
+        .select()
+        .single();
+
+      if (clusterError || !cluster) {
+        console.error(
+          "POST /api/cluster: failed to create cluster",
+          clusterError
+        );
+        continue;
+      }
+
+      const { error: updateError } = await supabaseServer
+        .from("reports")
+        .update({ cluster_id: cluster.id, status: "clustered" })
+        .in(
+          "id",
+          members.map((m) => m.id)
+        );
+
+      if (updateError) {
+        console.error(
+          "POST /api/cluster: failed to assign cluster_id",
+          updateError
+        );
+        continue;
+      }
+
+      clustersCreated += 1;
+      reportsClustered += members.length;
     }
   }
 
-  let clustersCreated = 0;
-  let reportsClustered = 0;
-
-  for (const group of groups) {
-    const members = group.report_indices.map((idx) => reports[idx]);
-    const districts = members
-      .map((m) => m.district)
-      .filter((d): d is string => Boolean(d));
-    const district = districts[0] ?? null;
-
-    const { data: cluster, error: clusterError } = await supabaseServer
-      .from("clusters")
-      .insert({
-        title: group.title,
-        summary: group.summary,
-        district,
-        report_count: members.length,
-        representative_report_id: members[0].id,
-      })
-      .select()
-      .single();
-
-    if (clusterError || !cluster) {
-      console.error(
-        "POST /api/cluster: failed to create cluster",
-        clusterError
-      );
-      continue;
-    }
-
-    const { error: updateError } = await supabaseServer
-      .from("reports")
-      .update({ cluster_id: cluster.id, status: "clustered" })
-      .in(
-        "id",
-        members.map((m) => m.id)
-      );
-
-    if (updateError) {
-      console.error(
-        "POST /api/cluster: failed to assign cluster_id",
-        updateError
-      );
-      continue;
-    }
-
-    clustersCreated += 1;
-    reportsClustered += members.length;
+  if (clustersCreated === 0 && batchesFailed > 0) {
+    return NextResponse.json(
+      { error: "AI 클러스터링에 실패했습니다. 잠시 후 다시 시도해주세요." },
+      { status: 502 }
+    );
   }
 
   return NextResponse.json({
     clusters_created: clustersCreated,
     reports_clustered: reportsClustered,
+    batches_failed: batchesFailed,
   });
 }
