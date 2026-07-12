@@ -7,6 +7,8 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { clusterSchema, savedReportSchema, policyReportSchema } from "@/lib/schema";
 import { SCORE_FACTOR_LABELS as FACTOR_LABELS } from "@/lib/scoring";
 import { PolicyReportPanel } from "@/components/PolicyReportPanel";
+import { TransitEvidence } from "@/components/TransitEvidence";
+import { findTransitEvidenceConfig } from "@/lib/transitEvidence";
 
 function ReportCard({
   report,
@@ -82,6 +84,8 @@ export default async function ClusterDetailPage({
     ? policyReportSchema.parse(policyReportData)
     : null;
 
+  const transitEvidence = findTransitEvidenceConfig(cluster.title);
+
   return (
     <div className="flex flex-1 flex-col gap-6 bg-zinc-50 px-4 py-6 dark:bg-black sm:px-6">
       <div className="flex flex-col gap-2">
@@ -127,6 +131,14 @@ export default async function ClusterDetailPage({
             )}
           </ul>
         </div>
+      )}
+
+      {transitEvidence && (
+        <TransitEvidence
+          stationId={transitEvidence.stationId}
+          stationName={transitEvidence.stationName}
+          note={transitEvidence.note}
+        />
       )}
 
       <PolicyReportPanel
