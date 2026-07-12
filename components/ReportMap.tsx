@@ -1,58 +1,84 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import { useState } from "react";
+import {
+  Map as KakaoMap,
+  MapMarker,
+  CustomOverlayMap,
+  useKakaoLoader,
+} from "react-kakao-maps-sdk";
 import { copy } from "@/lib/copy";
 import { HWASEONG_CENTER } from "@/lib/geocode";
 import type { SavedReport } from "@/lib/schema";
 
-// react-leaflet's default marker icon points at asset paths that don't
-// resolve under bundlers — rebuild it from the CDN-served images instead.
-const markerIcon = L.icon({
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
-
 export type PlottedReport = SavedReport & { lat: number; lng: number };
 
 export function ReportMap({ reports }: { reports: PlottedReport[] }) {
+  const [loading, error] = useKakaoLoader({
+    appkey: process.env.NEXT_PUBLIC_KAKAO_MAP_KEY ?? "",
+  });
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  if (error) {
+    return (
+      <div className="flex h-full items-center justify-center bg-white text-sm text-red-600 dark:bg-zinc-950 dark:text-red-400">
+        {copy.map.loadError}
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-full items-center justify-center bg-white text-sm text-zinc-500 dark:bg-zinc-950 dark:text-zinc-400">
+        {copy.map.loading}
+      </div>
+    );
+  }
+
   return (
-    <MapContainer
-      center={HWASEONG_CENTER}
-      zoom={11}
-      scrollWheelZoom
+    <KakaoMap
+      center={{ lat: HWASEONG_CENTER[0], lng: HWASEONG_CENTER[1] }}
+      level={8}
       className="h-full w-full"
     >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
       {reports.map((report) => (
-        <Marker
+        <MapMarker
           key={report.id}
-          position={[report.lat, report.lng]}
-          icon={markerIcon}
-        >
-          <Popup>
-            <div className="flex flex-col gap-1 text-sm">
-              <p className="font-medium">{report.summary}</p>
-              <p className="text-zinc-600">
-                {report.sub_category} · {report.time_pattern}
-              </p>
-              <p className="text-zinc-600">
-                {copy.map.popup.severity}: {report.severity}
-              </p>
-            </div>
-          </Popup>
-        </Marker>
+          position={{ lat: report.lat, lng: report.lng }}
+          onClick={() =>
+            setOpenId((current) => (current === report.id ? null : report.id))
+          }
+        />
       ))}
-    </MapContainer>
+      {reports
+        .filter((report) => report.id === openId)
+        .map((report) => (
+          <CustomOverlayMap
+            key={report.id}
+            position={{ lat: report.lat, lng: report.lng }}
+            yAnchor={1.4}
+          >
+            <div className="relative rounded-lg bg-white p-3 text-sm shadow-lg ring-1 ring-zinc-200">
+              <button
+                type="button"
+                onClick={() => setOpenId(null)}
+                className="absolute right-1.5 top-1.5 text-zinc-400 hover:text-zinc-700"
+                aria-label="닫기"
+              >
+                ×
+              </button>
+              <div className="flex flex-col gap-1 pr-4">
+                <p className="font-medium text-zinc-900">{report.summary}</p>
+                <p className="text-zinc-600">
+                  {report.sub_category} · {report.time_pattern}
+                </p>
+                <p className="text-zinc-600">
+                  {copy.map.popup.severity}: {report.severity}
+                </p>
+              </div>
+            </div>
+          </CustomOverlayMap>
+        ))}
+    </KakaoMap>
   );
 }
