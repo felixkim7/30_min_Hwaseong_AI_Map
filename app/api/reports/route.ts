@@ -2,6 +2,7 @@ import "server-only";
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { createReportSchema, savedReportSchema } from "@/lib/schema";
+import { geocodeLocation, GeocodeError } from "@/lib/kakaoGeocode";
 
 const FILTERABLE_COLUMNS = [
   "district",
@@ -58,9 +59,29 @@ export async function POST(request: Request) {
     );
   }
 
+  let geocoded: { lat: number; lng: number; district: string } | null = null;
+  try {
+    const result = await geocodeLocation(parsed.data.location_name);
+    if (result) {
+      geocoded = { lat: result.lat, lng: result.lng, district: result.district };
+    }
+  } catch (err) {
+    // Geocoding is best-effort — never block saving a report over it.
+    if (err instanceof GeocodeError) {
+      console.error("POST /api/reports: geocoding failed", err);
+    } else {
+      throw err;
+    }
+  }
+
   const { data, error } = await supabaseServer
     .from("reports")
-    .insert(parsed.data)
+    .insert({
+      ...parsed.data,
+      lat: geocoded?.lat ?? null,
+      lng: geocoded?.lng ?? null,
+      district: geocoded?.district ?? null,
+    })
     .select()
     .single();
 

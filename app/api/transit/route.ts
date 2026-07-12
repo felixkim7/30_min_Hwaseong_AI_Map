@@ -22,7 +22,15 @@ export type TransitResponse = {
 async function fetchAllArrivalsForStation(
   stationId: string
 ): Promise<GbisArrivalItem[]> {
-  const routes = await fetchRoutesAtStation(stationId);
+  let routes;
+  try {
+    routes = await fetchRoutesAtStation(stationId);
+  } catch {
+    // The route list is a single request the whole response depends on —
+    // worth one retry before giving up and falling back, since a transient
+    // upstream hiccup here would otherwise blank out all 13+ routes.
+    routes = await fetchRoutesAtStation(stationId);
+  }
   if (routes.length === 0) {
     throw new GbisApiError("No routes found for this station.");
   }
