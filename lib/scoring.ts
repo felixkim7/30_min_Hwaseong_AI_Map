@@ -4,12 +4,12 @@ import type { SavedReport, ScoreBreakdown } from "@/lib/schema";
 // The LLM may explain a score in words (phase 07), but the number always
 // comes from here, never from the model.
 export const SCORE_WEIGHTS = {
-  recurrence: 0.3,
-  safety: 0.25,
-  time_sensitivity: 0.15,
-  vulnerable_impact: 0.15,
-  policy_alignment: 0.1,
-  feasibility: 0.05,
+  recurrence: 0.4,
+  safety: 0.22,
+  time_sensitivity: 0.13,
+  vulnerable_impact: 0.13,
+  policy_alignment: 0.08,
+  feasibility: 0.04,
 } as const;
 
 // Shared Korean labels for each factor — used anywhere a breakdown is shown

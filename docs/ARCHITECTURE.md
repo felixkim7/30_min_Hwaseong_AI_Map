@@ -148,12 +148,12 @@ routes using the service-role key.
 
 ```
 score = 100 * (
-  0.30 * recurrence        +   // how many reports in this cluster (normalized)
-  0.25 * safety            +   // accident / night-return / pedestrian risk
-  0.15 * time_sensitivity  +   // rush hour / school hours / late night
-  0.15 * vulnerable_impact +   // elderly, disabled, students, pregnant
-  0.10 * policy_alignment  +   // matches circular rail / express bus / night transit
-  0.05 * feasibility           // short-term route/signal/stop tweak possible
+  0.40 * recurrence        +   // how many reports in this cluster (normalized)
+  0.22 * safety            +   // accident / night-return / pedestrian risk
+  0.13 * time_sensitivity  +   // rush hour / school hours / late night
+  0.13 * vulnerable_impact +   // elderly, disabled, students, pregnant
+  0.08 * policy_alignment  +   // matches circular rail / express bus / night transit
+  0.04 * feasibility           // short-term route/signal/stop tweak possible
 )
 ```
 

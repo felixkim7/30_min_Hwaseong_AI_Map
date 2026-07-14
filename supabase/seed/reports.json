@@ -93,7 +93,7 @@
   {
     "masked_text": "동탄역 환승주차장에서 버스정류장까지 걸어가는 동선이 복잡하고 표지판이 헷갈립니다.",
     "category": "교통",
-    "sub_category": "환승",
+    "sub_category": "보행안전",
     "problem_types": ["동선 복잡", "안내 부족"],
     "location_name": "동탄역 환승주차장",
     "time_pattern": "상시",

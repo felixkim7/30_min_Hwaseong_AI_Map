@@ -39,6 +39,20 @@ function extractDistrict(addressName: string): string {
   return dongEupMyeon ?? "화성시";
 }
 
+// If the citizen's original text names a specific 읍/면/동 (e.g. "봉담읍
+// 산업단지"), extract it so we can require the matched address to actually
+// be in that area. Kakao's keyword search treats "봉담읍" as just another
+// search term, not a hard filter — a query like "화성시 봉담읍 산업단지" can
+// match a same-named place in a totally different 화성시 dong (seen in
+// practice: matched "일진산업단지" in 안녕동 instead of anything in 봉담읍),
+// because "산업단지" alone outranks the 읍/면/동 token in Kakao's relevance
+// scoring. Without this check we'd silently accept a wrong-district match as
+// long as it's still somewhere in 화성시.
+function extractNamedDistrictHint(locationName: string): string | null {
+  const match = locationName.match(/([가-힣]+(?:읍|면|동))/);
+  return match ? match[1] : null;
+}
+
 // Generic connector/suffix words that describe *where relative to a
 // landmark*, not the landmark itself. Kakao's keyword search matches real
 // place names well but fails on compound phrases like "OO 앞 OO 버스정류장" —
@@ -169,6 +183,7 @@ export async function geocodeLocation(
   }
 
   const candidates = buildQueryCandidates(locationName);
+  const districtHint = extractNamedDistrictHint(locationName);
 
   // Require a genuine Hwaseong-address match at every candidate tier. A
   // generic word (e.g. "대로", "주택가") coincidentally matching *something*
@@ -181,9 +196,18 @@ export async function geocodeLocation(
     const query = candidate.includes("화성") ? candidate : `화성시 ${candidate}`;
     const documents = await searchKeyword(apiKey, query);
 
-    const hwaseongMatch = documents.find((d) =>
+    const hwaseongMatches = documents.filter((d) =>
       d.address_name.includes("화성시")
     );
+
+    // When the citizen named a specific 읍/면/동, a Hwaseong match in some
+    // *other* 읍/면/동 is still a wrong pin (e.g. "봉담읍 산업단지" landing
+    // in 안녕동) — prefer a match confirmed to be in the named area, and
+    // only fall back to the first Hwaseong match if none agrees.
+    const hwaseongMatch = districtHint
+      ? (hwaseongMatches.find((d) => d.address_name.includes(districtHint)) ??
+        null)
+      : (hwaseongMatches[0] ?? null);
     if (!hwaseongMatch) continue;
 
     return {

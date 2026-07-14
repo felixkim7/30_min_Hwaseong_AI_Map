@@ -32,6 +32,11 @@ masked_text 필드를 만들 때 원문에 **실제로 등장하는** 아래 항
 # 분류 규칙
 - category는 항상 "교통" 고정값입니다.
 - sub_category는 다음 중 정확히 하나: ${subCategoryOptions.join(", ")}
+  - "환승"은 버스/지하철 배차간격, 혼잡, 노선 부족 등 대중교통 운행 자체의 문제일 때만
+    사용하세요. 환승센터·정류장 "주변"에서 벌어지는 문제라도 도보 동선이 복잡하거나
+    표지판/안내가 부족해서 헷갈리는 것이 핵심이라면 "보행안전"으로 분류하세요 — 버스가
+    등장한다고 해서 무조건 "환승"은 아닙니다. 핵심 불편이 "기다림/배차/혼잡"인지
+    "길찾기/안내"인지로 구분하세요.
 - time_pattern은 다음 중 정확히 하나: ${timePatternOptions.join(", ")}
 - transport_mode는 다음 중 정확히 하나: ${transportModeOptions.join(", ")}
 - target_groups는 다음 중 0개 이상 배열: ${targetGroupOptions.join(", ")}
