@@ -80,6 +80,32 @@ const gbisStationRouteResponseSchema = z.object({
 
 export type GbisRouteAtStation = z.infer<typeof gbisRouteAtStationSchema>;
 
+const gbisNearbyStationSchema = z.object({
+  stationId: z.number(),
+  stationName: z.string(),
+  x: z.number(),
+  y: z.number(),
+  distance: z.number(),
+});
+
+const gbisNearbyStationResponseSchema = z.object({
+  response: z.object({
+    msgHeader: z.object({
+      resultCode: z.number(),
+      resultMessage: z.string(),
+    }),
+    msgBody: z
+      .object({
+        busStationAroundList: z
+          .union([z.array(gbisNearbyStationSchema), gbisNearbyStationSchema])
+          .optional(),
+      })
+      .optional(),
+  }),
+});
+
+export type GbisNearbyStation = z.infer<typeof gbisNearbyStationSchema>;
+
 export class GbisApiError extends Error {}
 
 function getApiKey(): string {
@@ -158,6 +184,47 @@ export async function fetchRoutesAtStation(
   }
 
   const list = parsed.data.response.msgBody?.busRouteList;
+  if (!list) return [];
+  return Array.isArray(list) ? list : [list];
+}
+
+// GBIS uses resultCode 4 ("결과가 존재하지 않습니다") to mean "no stations
+// near this point" — a valid empty result, not an API failure.
+const NO_RESULTS_CODE = 4;
+
+/**
+ * Fetches bus stops near a coordinate (WGS84), sorted by distance. Server-only.
+ * Used to discover real stations for a report's geocoded location instead of
+ * relying on any hardcoded station config.
+ */
+export async function fetchNearbyStations(
+  x: number,
+  y: number
+): Promise<GbisNearbyStation[]> {
+  const url = new URL(`${STATION_BASE_URL}/getBusStationAroundListv2`);
+  url.searchParams.set("serviceKey", getApiKey());
+  url.searchParams.set("x", String(x));
+  url.searchParams.set("y", String(y));
+  url.searchParams.set("format", "json");
+
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) {
+    throw new GbisApiError(`GBIS API returned HTTP ${res.status}`);
+  }
+
+  const raw = await res.json();
+  const parsed = gbisNearbyStationResponseSchema.safeParse(raw);
+  if (!parsed.success) {
+    throw new GbisApiError("GBIS API returned an unexpected shape.");
+  }
+
+  const { resultCode, resultMessage } = parsed.data.response.msgHeader;
+  if (resultCode === NO_RESULTS_CODE) return [];
+  if (resultCode !== 0) {
+    throw new GbisApiError(`GBIS API error ${resultCode}: ${resultMessage}`);
+  }
+
+  const list = parsed.data.response.msgBody?.busStationAroundList;
   if (!list) return [];
   return Array.isArray(list) ? list : [list];
 }

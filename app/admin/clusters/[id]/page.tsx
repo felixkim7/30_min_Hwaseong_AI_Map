@@ -8,7 +8,7 @@ import { clusterSchema, savedReportSchema, policyReportSchema } from "@/lib/sche
 import { SCORE_FACTOR_LABELS as FACTOR_LABELS } from "@/lib/scoring";
 import { PolicyReportPanel } from "@/components/PolicyReportPanel";
 import { TransitEvidence } from "@/components/TransitEvidence";
-import { findTransitEvidenceConfig } from "@/lib/transitEvidence";
+import { findNearbyStationsForCluster } from "@/lib/transitEvidence";
 
 function ReportCard({
   report,
@@ -84,7 +84,29 @@ export default async function ClusterDetailPage({
     ? policyReportSchema.parse(policyReportData)
     : null;
 
-  const transitEvidence = findTransitEvidenceConfig(cluster.title);
+  // Only show bus-stop evidence for clusters actually about bus service —
+  // a crosswalk or road-congestion cluster having a bus stop nearby by
+  // coincidence isn't relevant evidence for that issue.
+  const BUS_RELATED_SUB_CATEGORIES = new Set(["버스 배차", "환승"]);
+  const isBusRelated = members.some(
+    (m) =>
+      m.transport_mode === "버스" || BUS_RELATED_SUB_CATEGORIES.has(m.sub_category)
+  );
+
+  let nearbyStations: Awaited<ReturnType<typeof findNearbyStationsForCluster>> =
+    [];
+  let transitLookupFailed = false;
+  if (isBusRelated) {
+    try {
+      nearbyStations = await findNearbyStationsForCluster(members);
+    } catch (error) {
+      console.error(
+        "ClusterDetailPage: failed to look up nearby stations",
+        error
+      );
+      transitLookupFailed = true;
+    }
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-6 bg-zinc-50 px-4 py-6 dark:bg-black sm:px-6">
@@ -133,12 +155,23 @@ export default async function ClusterDetailPage({
         </div>
       )}
 
-      {transitEvidence && (
+      {isBusRelated && nearbyStations.length > 0 && (
         <TransitEvidence
-          stationId={transitEvidence.stationId}
-          stationName={transitEvidence.stationName}
-          note={transitEvidence.note}
+          stations={nearbyStations}
+          note={copy.admin.transitEvidence.multiStationNote}
         />
+      )}
+
+      {isBusRelated && nearbyStations.length === 0 && !transitLookupFailed && (
+        <div className="rounded-2xl bg-white p-4 text-sm text-zinc-500 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-zinc-400 dark:ring-zinc-800">
+          {copy.admin.transitEvidence.empty}
+        </div>
+      )}
+
+      {isBusRelated && transitLookupFailed && (
+        <div className="rounded-2xl bg-white p-4 text-sm text-red-600 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-red-400 dark:ring-zinc-800">
+          {copy.admin.transitEvidence.error}
+        </div>
       )}
 
       <PolicyReportPanel

@@ -95,6 +95,7 @@ export const copy = {
     empty: "아직 제보가 없습니다.",
     loading: "지도를 불러오는 중...",
     loadError: "제보 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.",
+    retry: "다시 시도",
     resultCount: "건의 제보가 지도에 표시되고 있습니다.",
   },
   admin: {
@@ -102,8 +103,11 @@ export const copy = {
     loginSubtitle: "화성시 교통불편 관리자 대시보드입니다.",
     passphraseLabel: "비밀번호",
     loginSubmit: "로그인",
+    loginSubmitting: "로그인 중...",
     loginError: "비밀번호가 올바르지 않습니다.",
     logout: "로그아웃",
+    loggingOut: "로그아웃 중...",
+    logoutError: "로그아웃에 실패했습니다.",
     dashboardTitle: "관리자 대시보드",
     kpis: {
       totalReports: "총 제보 수",
@@ -156,7 +160,11 @@ export const copy = {
       cachedLabel: "캐시된 데이터 (실시간 조회 실패 시 대체 표시)",
       loading: "실시간 버스 정보를 불러오는 중...",
       error: "실측 데이터를 불러오지 못했습니다.",
+      retry: "다시 시도",
       crowdedLevels: ["여유", "보통", "혼잡", "매우 혼잡"],
+      empty: "이 제보 위치 주변에서 등록된 버스 정류소를 찾지 못했습니다.",
+      multiStationNote:
+        "※ 이 클러스터에 포함된 제보 위치들 주변의 정류소를 모아 보여줍니다. 노선 카드에 표시되는 위치는 정류소명이 아니라 현재 버스가 지나고 있는 위치입니다.",
     },
   },
 } as const;

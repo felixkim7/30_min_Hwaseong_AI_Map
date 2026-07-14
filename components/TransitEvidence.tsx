@@ -64,17 +64,16 @@ function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
   );
 }
 
-export function TransitEvidence({
+function SingleStationEvidence({
   stationId,
   stationName,
-  note,
 }: {
   stationId: string;
   stationName: string;
-  note: string;
 }) {
   const [data, setData] = useState<TransitResponse | null>(null);
   const [error, setError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -84,7 +83,10 @@ export function TransitEvidence({
         return res.json();
       })
       .then((json) => {
-        if (!cancelled) setData(json as TransitResponse);
+        if (!cancelled) {
+          setData(json as TransitResponse);
+          setError(false);
+        }
       })
       .catch(() => {
         if (!cancelled) setError(true);
@@ -92,17 +94,17 @@ export function TransitEvidence({
     return () => {
       cancelled = true;
     };
-  }, [stationId]);
+  }, [stationId, retryKey]);
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
+    <div className="flex flex-col gap-3 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900/60">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-          {copy.admin.transitEvidence.title}
-        </h2>
+        <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          {copy.admin.transitEvidence.stationLabel}: {stationName}
+        </p>
         {data && (
           <span
-            className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+            className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
               data.source === "live"
                 ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
                 : "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
@@ -115,14 +117,19 @@ export function TransitEvidence({
         )}
       </div>
 
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        {copy.admin.transitEvidence.stationLabel}: {stationName}
-      </p>
-
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400">
-          {copy.admin.transitEvidence.error}
-        </p>
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-red-600 dark:text-red-400">
+            {copy.admin.transitEvidence.error}
+          </p>
+          <button
+            type="button"
+            onClick={() => setRetryKey((k) => k + 1)}
+            className="w-fit rounded-full border border-red-300 px-3 py-1 text-xs font-medium hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-950/40"
+          >
+            {copy.admin.transitEvidence.retry}
+          </button>
+        </div>
       )}
 
       {!error && !data && (
@@ -141,9 +148,41 @@ export function TransitEvidence({
           <p className="text-xs text-zinc-400 dark:text-zinc-500">
             {new Date(data.fetched_at).toLocaleString("ko-KR")}
           </p>
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">{note}</p>
         </div>
       )}
+    </div>
+  );
+}
+
+export type TransitEvidenceStation = {
+  stationId: string;
+  stationName: string;
+};
+
+export function TransitEvidence({
+  stations,
+  note,
+}: {
+  stations: TransitEvidenceStation[];
+  note: string;
+}) {
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
+      <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+        {copy.admin.transitEvidence.title}
+      </h2>
+
+      <div className="flex flex-col gap-2">
+        {stations.map((station) => (
+          <SingleStationEvidence
+            key={station.stationId}
+            stationId={station.stationId}
+            stationName={station.stationName}
+          />
+        ))}
+      </div>
+
+      <p className="text-xs text-zinc-400 dark:text-zinc-500">{note}</p>
     </div>
   );
 }
