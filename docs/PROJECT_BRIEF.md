@@ -59,11 +59,19 @@ AI", we lose creativity points. Lead with the three points above.
 
 | Criterion | Where we win |
 |---|---|
-| Creativity (창의성) | Citizen text → ranked policy data + auto report; the three differentiators above |
+| Creativity (창의성) | Citizen text → ranked policy data + auto report; the three differentiators above. Phases 10–11 (optional) push this further: the AI moves from structuring/summarizing text to *reasoning* about real transit-coverage gaps and proposing a corridor, which is a visibly different kind of AI task than classification/masking/summarization |
 | Efficiency (효율성) | Auto classification, duplicate merging, and report drafting cut manual triage time |
 | Application scope (적용범위) | Covers buses, rail transfers, late-night gaps, pedestrian safety, congestion. Frame traffic as a **pilot** of a method that extends to welfare / safety / environment — this lifts both this score and continuity |
 | Continuity (계속성) | Value compounds as reports accumulate; quarterly policy reports; participatory data pipeline |
 | Technical completeness (기술성) | Live LLM structuring + map + clustering + scoring + auto report + (phase 08) real public-data evidence, all demoable in-browser |
+
+### Note on phases 10–11 vs. "out of scope" below
+
+Phase 11's map overlay is a **qualitative suggested corridor** connecting a
+cluster's real report locations (an ordered set of waypoints, not a routed path
+following real streets) — it does not contradict the "no real-time route
+planning/navigation" rule below. It is a visualization of an AI *suggestion* for
+staff review, not a routing feature for end users.
 
 ## Known weaknesses & prepared answers
 

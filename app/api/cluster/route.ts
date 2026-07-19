@@ -341,8 +341,16 @@ export async function POST() {
   let clustersCreated = 0;
   let reportsClustered = 0;
   let batchesFailed = 0;
+  // A batch that fails twice used to be dropped silently — its reports stayed
+  // cluster_id: null forever unless someone happened to notice and re-ran
+  // POST /api/cluster again. Collect failed batches instead, so they get one
+  // more attempt after every other batch has been processed (a transient
+  // LLM/API hiccup on one batch shouldn't need a manual retry to resolve),
+  // and so any reports still unclustered after that are visible in the
+  // response instead of disappearing without a trace.
+  const permanentlyFailedBatches: SavedReport[][] = [];
 
-  for (const batch of batches) {
+  async function processBatch(batch: SavedReport[]): Promise<boolean> {
     let groups: Awaited<ReturnType<typeof requestGrouping>>;
     try {
       groups = await requestGrouping(batch);
@@ -355,8 +363,7 @@ export async function POST() {
           firstError,
           secondError
         );
-        batchesFailed += 1;
-        continue;
+        return false;
       }
     }
 
@@ -431,7 +438,28 @@ export async function POST() {
         reportsClustered += districtMembers.length;
       }
     }
+
+    return true;
   }
+
+  for (const batch of batches) {
+    const ok = await processBatch(batch);
+    if (!ok) permanentlyFailedBatches.push(batch);
+  }
+
+  // Give every batch that failed twice one more pass after the rest of the
+  // run has completed, instead of leaving its reports unclustered until
+  // someone notices and calls this endpoint again by hand.
+  const stillFailedBatches: SavedReport[][] = [];
+  for (const batch of permanentlyFailedBatches) {
+    const ok = await processBatch(batch);
+    if (!ok) stillFailedBatches.push(batch);
+  }
+  batchesFailed = stillFailedBatches.length;
+  const reportsUnclustered = stillFailedBatches.reduce(
+    (sum, batch) => sum + batch.length,
+    0
+  );
 
   if (clustersCreated === 0 && batchesFailed > 0) {
     return NextResponse.json(
@@ -446,5 +474,6 @@ export async function POST() {
     clusters_created: clustersCreated,
     reports_clustered: reportsClustered,
     batches_failed: batchesFailed,
+    reports_unclustered: reportsUnclustered,
   });
 }

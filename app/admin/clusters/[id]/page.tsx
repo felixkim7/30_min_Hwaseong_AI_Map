@@ -9,36 +9,8 @@ import { SCORE_FACTOR_LABELS as FACTOR_LABELS } from "@/lib/scoring";
 import { PolicyReportPanel } from "@/components/PolicyReportPanel";
 import { TransitEvidence } from "@/components/TransitEvidence";
 import { findNearbyStationsForCluster } from "@/lib/transitEvidence";
-
-function ReportCard({
-  report,
-  isRepresentative,
-}: {
-  report: ReturnType<typeof savedReportSchema.parse>;
-  isRepresentative: boolean;
-}) {
-  return (
-    <div className="flex flex-col gap-2 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900">
-      {isRepresentative && (
-        <span className="w-fit rounded-full bg-zinc-900 px-2 py-0.5 text-xs font-medium text-white dark:bg-zinc-50 dark:text-zinc-900">
-          {copy.admin.clusterDetail.representativeTitle}
-        </span>
-      )}
-      <p className="text-sm text-zinc-800 dark:text-zinc-200">
-        {report.masked_text}
-      </p>
-      <div className="flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-        <span>{report.sub_category}</span>
-        <span>·</span>
-        <span>{report.location_name}</span>
-        <span>·</span>
-        <span>{report.time_pattern}</span>
-        <span>·</span>
-        <span>심각도 {report.severity}</span>
-      </div>
-    </div>
-  );
-}
+import { ClusterMap } from "@/components/ClusterMap";
+import { ReportCard } from "@/components/ReportCard";
 
 export default async function ClusterDetailPage({
   params,
@@ -155,24 +127,12 @@ export default async function ClusterDetailPage({
         </div>
       )}
 
-      {isBusRelated && nearbyStations.length > 0 && (
-        <TransitEvidence
-          stations={nearbyStations}
-          note={copy.admin.transitEvidence.multiStationNote}
-        />
-      )}
-
-      {isBusRelated && nearbyStations.length === 0 && !transitLookupFailed && (
-        <div className="rounded-2xl bg-white p-4 text-sm text-zinc-500 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-zinc-400 dark:ring-zinc-800">
-          {copy.admin.transitEvidence.empty}
-        </div>
-      )}
-
-      {isBusRelated && transitLookupFailed && (
-        <div className="rounded-2xl bg-white p-4 text-sm text-red-600 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-red-400 dark:ring-zinc-800">
-          {copy.admin.transitEvidence.error}
-        </div>
-      )}
+      <div className="flex flex-col gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:ring-zinc-800">
+        <h2 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+          {copy.admin.clusterDetail.mapTitle}
+        </h2>
+        <ClusterMap members={members} />
+      </div>
 
       <PolicyReportPanel
         clusterId={cluster.id}
@@ -194,6 +154,25 @@ export default async function ClusterDetailPage({
           ))}
         </div>
       </div>
+
+      {isBusRelated && nearbyStations.length > 0 && (
+        <TransitEvidence
+          stations={nearbyStations}
+          note={copy.admin.transitEvidence.multiStationNote}
+        />
+      )}
+
+      {isBusRelated && nearbyStations.length === 0 && !transitLookupFailed && (
+        <div className="rounded-2xl bg-white p-4 text-sm text-zinc-500 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-zinc-400 dark:ring-zinc-800">
+          {copy.admin.transitEvidence.empty}
+        </div>
+      )}
+
+      {isBusRelated && transitLookupFailed && (
+        <div className="rounded-2xl bg-white p-4 text-sm text-red-600 shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-950 dark:text-red-400 dark:ring-zinc-800">
+          {copy.admin.transitEvidence.error}
+        </div>
+      )}
     </div>
   );
 }

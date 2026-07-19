@@ -122,6 +122,17 @@ export const copy = {
       bySubCategory: "불편 유형별 제보 수",
       byDistrict: "지역별 제보 수",
       countSuffix: "건",
+      clickHint: "막대를 클릭하면 상세 제보를 볼 수 있습니다.",
+    },
+    reportsByField: {
+      back: "← 대시보드로",
+      subCategoryTitle: "불편 유형",
+      districtTitle: "지역",
+      title: (value: string) => `"${value}" 제보`,
+      mapTitle: "제보 위치 지도",
+      listTitle: "제보 목록",
+      empty: "해당하는 제보가 없습니다.",
+      invalidField: "잘못된 접근입니다.",
     },
     clusterList: {
       title: "우선순위 클러스터 목록",
@@ -134,6 +145,7 @@ export const copy = {
       representativeTitle: "대표 제보",
       memberReportsTitle: "포함된 제보",
       breakdownTitle: "점수 세부 내역",
+      mapTitle: "제보 위치 지도",
     },
     policyReport: {
       generate: "정책 검토 보고서 생성",
@@ -165,6 +177,9 @@ export const copy = {
       empty: "이 제보 위치 주변에서 등록된 버스 정류소를 찾지 못했습니다.",
       multiStationNote:
         "※ 이 클러스터에 포함된 제보 위치들 주변의 정류소를 모아 보여줍니다. 노선 카드에 표시되는 위치는 정류소명이 아니라 현재 버스가 지나고 있는 위치입니다.",
+      distanceSuffix: "m",
+      viewArrivals: "도착 정보 보기",
+      hideArrivals: "접기",
     },
   },
 } as const;

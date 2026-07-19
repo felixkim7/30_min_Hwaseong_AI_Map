@@ -66,10 +66,8 @@ function RouteArrivalCard({ item }: { item: GbisArrivalItem }) {
 
 function SingleStationEvidence({
   stationId,
-  stationName,
 }: {
   stationId: string;
-  stationName: string;
 }) {
   const [data, setData] = useState<TransitResponse | null>(null);
   const [error, setError] = useState(false);
@@ -97,11 +95,8 @@ function SingleStationEvidence({
   }, [stationId, retryKey]);
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900/60">
+    <div className="flex flex-col gap-3 border-t border-zinc-200 pt-3 dark:border-zinc-800">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          {copy.admin.transitEvidence.stationLabel}: {stationName}
-        </p>
         {data && (
           <span
             className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -154,9 +149,41 @@ function SingleStationEvidence({
   );
 }
 
+function StationRow({ station }: { station: TransitEvidenceStation }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="flex flex-col gap-2 rounded-xl bg-zinc-50 p-3 dark:bg-zinc-900/60">
+      <button
+        type="button"
+        onClick={() => setExpanded((e) => !e)}
+        className="flex items-center justify-between gap-2 text-left"
+      >
+        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          {copy.admin.transitEvidence.stationLabel}: {station.stationName}
+          {station.distance != null && (
+            <span className="ml-1.5 text-xs font-normal text-zinc-400 dark:text-zinc-500">
+              ({Math.round(station.distance)}
+              {copy.admin.transitEvidence.distanceSuffix})
+            </span>
+          )}
+        </span>
+        <span className="shrink-0 text-xs font-medium text-zinc-500 hover:underline dark:text-zinc-400">
+          {expanded
+            ? copy.admin.transitEvidence.hideArrivals
+            : copy.admin.transitEvidence.viewArrivals}
+        </span>
+      </button>
+
+      {expanded && <SingleStationEvidence stationId={station.stationId} />}
+    </div>
+  );
+}
+
 export type TransitEvidenceStation = {
   stationId: string;
   stationName: string;
+  distance?: number;
 };
 
 export function TransitEvidence({
@@ -174,11 +201,7 @@ export function TransitEvidence({
 
       <div className="flex flex-col gap-2">
         {stations.map((station) => (
-          <SingleStationEvidence
-            key={station.stationId}
-            stationId={station.stationId}
-            stationName={station.stationName}
-          />
+          <StationRow key={station.stationId} station={station} />
         ))}
       </div>
 

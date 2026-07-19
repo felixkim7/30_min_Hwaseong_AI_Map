@@ -141,6 +141,10 @@ routes using the service-role key.
 - `POST /api/cluster` → recompute clusters over unclustered reports.
 - `POST /api/score` → compute/refresh `priority_score` + `score_breakdown`.
 - `POST /api/policy-report` → `{ cluster_id }` → markdown report; persist to `policy_reports`.
+  (phase 10, optional) also computes real route-coverage gaps for bus-related
+  clusters via `lib/gbis.ts` and feeds them into the report prompt as a
+  "대중교통 개선 제안" section — structural reasoning only, never a fabricated
+  schedule/frequency.
 - `GET /api/transit?stopId=…` (phase 08) → proxy Gyeonggi API server-side; cache a
   fallback JSON so the demo never fails if the upstream is down.
 
