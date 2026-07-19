@@ -29,10 +29,12 @@ each part gets built solidly and can be upgraded later without breaking the rest
 | 07 | Policy report | phase-07-policy-report.md | 05, 06 | One-page auto report per cluster |
 | 08 | Public-data integration | phase-08-public-data-integration.md | 05 | Real Gyeonggi transit data as evidence |
 | 09 | Seed & demo polish | phase-09-seed-and-demo-polish.md | all | Seeded map/dashboard + a clean 2-min demo |
+| 10 | Transit gap reasoning | phase-10-transit-gap-reasoning.md | 05, 07, 08 | AI reasons about real route-coverage gaps in the policy report |
+| 11 | Route recommendation map overlay | phase-11-route-recommendation-map.md | 09, 10 | Visualize the suggested corridor on the cluster map |
 
 ## Suggested build order
 
-Straight 00 → 09. Two natural checkpoints:
+Straight 00 → 09 for the core contest build. Two natural checkpoints:
 
 - **MVP demoable (00–04 + a small seed from 09):** input → AI structuring → save →
   map. This alone is a working, showable product. Reach this first.
@@ -40,8 +42,15 @@ Straight 00 → 09. Two natural checkpoints:
   policy report, and real public-data evidence — the parts that win the higher-value
   criteria and carry the live demo.
 
+Phases 10–11 are optional creativity-boosting additions, added after the core build
+was working and stable. They exist to push the 창의성 (creativity) and AI-usage
+story further than "AI structures and summarizes text three different ways" — see
+`docs/PROJECT_BRIEF.md`'s differentiation section. Only take these on once 00–09
+are solid; do not let them put the core demo at risk.
+
 ## If time is short
 
 Priority to protect, in order: 00, 01, 02, 03, 04, 07, 09, then 05/06, then 08.
 A polished input→AI→map→auto-report path that runs flawlessly beats a broad build
-that stutters during the live demo.
+that stutters during the live demo. Phases 10–11 come last, after everything above
+is solid — 10 before 11, since 10 is cheaper and safer and 11 depends on it.

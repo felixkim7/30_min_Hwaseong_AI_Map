@@ -1,5 +1,7 @@
 import "server-only";
 import { z } from "zod";
+import { fetchNearbyStations, GbisApiError } from "@/lib/gbis";
+import { resolveLocation } from "@/lib/geocode";
 
 // Kakao Local API — keyword search, used to resolve a citizen's free-text
 // location into real coordinates. Docs: https://developers.kakao.com/docs/latest/ko/local/dev-guide
@@ -95,6 +97,21 @@ function stripNoiseWords(text: string): string {
   return result.replace(/\s+/g, " ").trim();
 }
 
+// Kakao's Local API doesn't index bus stops as searchable places at all —
+// verified in practice: even a keyword search for "정류장" scoped to a 300m
+// radius around a real, correctly-resolved landmark returns zero results.
+// Bus stops live in GBIS instead (see lib/gbis.ts, already used for transit
+// evidence). So once a landmark noun resolves to real coordinates, if the
+// citizen's original text asked for a bus stop specifically, look up the
+// actual nearest real bus stop from GBIS around that point and use its
+// coordinates instead of the landmark's own — much more precise than "some
+// point near the school" when the citizen meant "the stop by the school."
+const BUS_STOP_WORDS = ["버스정류장", "정류장", "정류소"];
+
+function mentionsBusStop(locationName: string): boolean {
+  return BUS_STOP_WORDS.some((word) => locationName.includes(word));
+}
+
 // Builds a sequence of queries to try, from most specific to most permissive:
 // 1. the noise-stripped text, if stripping actually removed something —
 //    noise words (generic facility/road/connector terms like "대로",
@@ -165,6 +182,10 @@ async function searchKeyword(
   return parsed.data.documents;
 }
 
+// GBIS station lookups beyond this radius aren't "the stop near X" anymore —
+// treat them as no match and keep the landmark's own coordinates instead.
+const MAX_BUS_STOP_DISTANCE_METERS = 500;
+
 /**
  * Resolves a free-text location (e.g. "봉담 신창비바패밀리 앞 수영초등학교
  * 버스정류장") to real coordinates via Kakao's keyword search. Kakao matches
@@ -185,14 +206,19 @@ export async function geocodeLocation(
   const candidates = buildQueryCandidates(locationName);
   const districtHint = extractNamedDistrictHint(locationName);
 
-  // Require a genuine Hwaseong-address match at every candidate tier. A
-  // generic word (e.g. "대로", "주택가") coincidentally matching *something*
-  // in Hwaseong by luck is still meaningless, but accepting any non-Hwaseong
-  // top hit as a fallback is worse — it has previously returned real,
-  // confident-looking but wrong coordinates in Ansan/Suwon/Paju. Prefer
-  // returning no match (caller falls back to null/city-center) over a
-  // silently wrong pin.
+  // A candidate that is nothing but the bare district name itself (e.g.
+  // "우정읍", whether it's the only thing left after stripping noise words
+  // or just one of several word-tier candidates tried) is too generic to
+  // trust an arbitrary top-ranked hit for, regardless of what else was
+  // tried — Kakao's top result for a whole 읍/면 can be a beach, island, or
+  // reservoir with no connection to what the citizen actually meant (seen in
+  // practice: "화성시 우정읍" alone top-matched 국화도, an offshore island
+  // technically inside 우정읍's boundary; "화성시 봉담읍" alone top-matched
+  // a reservoir). Always skip this candidate and fall through to the
+  // district-center fallback below instead.
   for (const candidate of candidates) {
+    if (candidate === districtHint) continue;
+
     const query = candidate.includes("화성") ? candidate : `화성시 ${candidate}`;
     const documents = await searchKeyword(apiKey, query);
 
@@ -210,12 +236,53 @@ export async function geocodeLocation(
       : (hwaseongMatches[0] ?? null);
     if (!hwaseongMatch) continue;
 
+    let lat = Number(hwaseongMatch.y);
+    let lng = Number(hwaseongMatch.x);
+
+    // Kakao doesn't index bus stops as searchable places (verified: even a
+    // keyword search for "정류장" scoped to a 300m radius around a correctly
+    // resolved landmark returns zero results) — they live in GBIS instead.
+    // If the citizen asked for a bus stop specifically, refine the landmark
+    // coordinate to the actual nearest real stop instead of leaving the pin
+    // on the landmark itself.
+    if (mentionsBusStop(locationName)) {
+      try {
+        const nearby = await fetchNearbyStations(lng, lat);
+        const closest = nearby[0];
+        if (closest && closest.distance <= MAX_BUS_STOP_DISTANCE_METERS) {
+          lat = closest.y;
+          lng = closest.x;
+        }
+      } catch (error) {
+        if (!(error instanceof GbisApiError)) throw error;
+        // A GBIS hiccup shouldn't fail the whole geocode — the landmark
+        // coordinate is still a reasonable pin, just less precise.
+      }
+    }
+
     return {
-      lat: Number(hwaseongMatch.y),
-      lng: Number(hwaseongMatch.x),
+      lat,
+      lng,
       district: extractDistrict(hwaseongMatch.address_name),
       matchedName: hwaseongMatch.place_name,
     };
+  }
+
+  // Nothing resolved to a specific place — if the citizen at least named a
+  // recognizable district, use that district's approximate center (the same
+  // table the client-side map fallback uses) instead of returning no match
+  // at all, so a report like "우정읍 버스정류장" still lands somewhere in
+  // 우정읍 rather than nowhere.
+  if (districtHint) {
+    const resolved = resolveLocation(districtHint);
+    if (resolved.district !== "화성시") {
+      return {
+        lat: resolved.lat,
+        lng: resolved.lng,
+        district: resolved.district,
+        matchedName: districtHint,
+      };
+    }
   }
 
   return null;
