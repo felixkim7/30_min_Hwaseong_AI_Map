@@ -1,5 +1,5 @@
 import "server-only";
-import { fetchNearbyStations, GbisApiError } from "@/lib/gbis";
+import { fetchNearbyStations, fetchRoutesAtStation, GbisApiError } from "@/lib/gbis";
 import type { SavedReport } from "@/lib/schema";
 
 // A cluster can span many real locations (e.g. 봉담읍 reports scattered
@@ -81,4 +81,90 @@ export async function findNearbyStationsForCluster(
   return Array.from(byStationId.values())
     .sort((a, b) => a.distance - b.distance)
     .slice(0, MAX_STATIONS_PER_CLUSTER);
+}
+
+// A location further than this from any real station has no meaningful
+// "closest stop" to reason about — treat it as unserved rather than
+// attaching a station that's really nowhere near it.
+const MAX_RELEVANT_STATION_DISTANCE_METERS = 500;
+
+export type LocationCoverage = {
+  lat: number;
+  lng: number;
+  stationName: string | null;
+  routeNames: string[];
+};
+
+export type ClusterTransitGap = {
+  locations: LocationCoverage[];
+  // Route names shared by two or more of the cluster's locations — i.e. the
+  // cluster is already connected by at least this route.
+  sharedRoutes: string[];
+  // Locations with no route in common with any other location in the
+  // cluster (or no nearby station at all) — the real coverage gap.
+  isolatedLocations: LocationCoverage[];
+};
+
+/**
+ * For each distinct report location in a cluster, finds the nearest real bus
+ * stop and the routes that actually serve it, then determines which
+ * locations already share a route (connected) and which don't (the real
+ * coverage gap). This is deliberately computed in code, not asked of the
+ * LLM — the model should reason about a gap we've already established from
+ * real data, not guess at route coverage from report text alone.
+ */
+export async function computeClusterTransitGap(
+  reports: Pick<SavedReport, "lat" | "lng">[]
+): Promise<ClusterTransitGap> {
+  const points = dedupeCoordinates(reports).slice(0, MAX_LOOKUPS_PER_CLUSTER);
+
+  const locations: LocationCoverage[] = await Promise.all(
+    points.map(async (point) => {
+      let nearby: Awaited<ReturnType<typeof fetchNearbyStations>>;
+      try {
+        nearby = await fetchNearbyStations(point.lng, point.lat);
+      } catch (error) {
+        if (!(error instanceof GbisApiError)) throw error;
+        nearby = [];
+      }
+
+      const closest = nearby[0];
+      if (!closest || closest.distance > MAX_RELEVANT_STATION_DISTANCE_METERS) {
+        return { ...point, stationName: null, routeNames: [] };
+      }
+
+      let routes: Awaited<ReturnType<typeof fetchRoutesAtStation>>;
+      try {
+        routes = await fetchRoutesAtStation(String(closest.stationId));
+      } catch (error) {
+        if (!(error instanceof GbisApiError)) throw error;
+        routes = [];
+      }
+
+      return {
+        ...point,
+        stationName: closest.stationName,
+        routeNames: routes.map((r) => r.routeName),
+      };
+    })
+  );
+
+  const routeCounts = new Map<string, number>();
+  for (const location of locations) {
+    for (const routeName of new Set(location.routeNames)) {
+      routeCounts.set(routeName, (routeCounts.get(routeName) ?? 0) + 1);
+    }
+  }
+  const sharedRoutes = Array.from(routeCounts.entries())
+    .filter(([, count]) => count >= 2)
+    .map(([routeName]) => routeName);
+
+  const sharedRouteSet = new Set(sharedRoutes);
+  const isolatedLocations = locations.filter(
+    (location) =>
+      location.routeNames.length === 0 ||
+      !location.routeNames.some((routeName) => sharedRouteSet.has(routeName))
+  );
+
+  return { locations, sharedRoutes, isolatedLocations };
 }

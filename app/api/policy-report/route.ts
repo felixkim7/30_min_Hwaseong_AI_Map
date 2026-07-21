@@ -10,6 +10,23 @@ import {
   type Cluster,
 } from "@/lib/schema";
 import { SCORE_FACTOR_LABELS } from "@/lib/scoring";
+import {
+  computeClusterTransitGap,
+  type ClusterTransitGap,
+} from "@/lib/transitEvidence";
+import { GbisApiError } from "@/lib/gbis";
+
+// Same bus-relevance check used to gate transit evidence in the cluster
+// detail page — a crosswalk/road-congestion cluster having a bus stop nearby
+// by coincidence isn't relevant transit-gap reasoning for that issue.
+const BUS_RELATED_SUB_CATEGORIES = new Set(["버스 배차", "환승"]);
+
+function isBusRelatedCluster(members: SavedReport[]): boolean {
+  return members.some(
+    (m) =>
+      m.transport_mode === "버스" || BUS_RELATED_SUB_CATEGORIES.has(m.sub_category)
+  );
+}
 
 const REQUIRED_HEADINGS = [
   "현황",
@@ -46,9 +63,64 @@ const SYSTEM_PROMPT = `당신은 화성시 교통 정책 담당자를 돕는 보
   섹션에 "※ 정류장별 배차 실적 등 공공데이터 연동 시 이 부분에 실측 근거를
   추가할 수 있습니다." 같은 한 줄 메모를 자연스럽게 넣어 향후 확장 지점을
   표시하세요 (phase 08에서 실제 데이터로 대체 예정).
+
+- 입력에 "# 실측 노선 커버리지 데이터"가 포함되어 있으면, "기대효과" 섹션 바로
+  뒤에 "## 대중교통 개선 제안" 섹션을 **반드시** 추가하세요. 이것은 선택이
+  아니라 필수 규칙입니다 — 데이터가 주어졌는데 이 섹션을 생략하는 것은 오류입니다.
+  반대로 이 데이터가 입력에 없으면 이 섹션을 절대 추가하지 마세요.
+- "대중교통 개선 제안" 섹션은 반드시 주어진 실측 데이터(정류소명, 실제 노선 번호,
+  어느 지점이 서로 연결되어 있고 어느 지점이 고립되어 있는지)에만 근거해서
+  작성하세요. 데이터에 없는 노선 번호나 정류소를 만들어내지 마세요.
+- 이 섹션에서는 구조적인 제안만 하세요 (예: 기존 노선 연장, 고립된 지점을 잇는
+  신규 노선 검토, 비운행 시간대 보완). **배차 간격(예: "30분마다"), 운행
+  시간표, 투입 차량 대수 등 구체적인 운영 수치는 절대로 지어내지 마세요** —
+  이는 데이터에 없는 것을 만들어내는 것이며 심각한 오류입니다.
+- 이 섹션 끝에도 "본 보고서는 참고 자료이며 최종 결정은 담당 부서가 판단합니다"라는
+  같은 원칙을 짧게 다시 언급하세요.
 - 마크다운 본문만 출력하세요. 코드 블록으로 감싸지 마세요.`;
 
-function buildUserPrompt(cluster: Cluster, members: SavedReport[]) {
+// Only worth showing the model a gap section when there's more than one
+// distinct location to compare and at least one of them is actually
+// isolated — a single-location cluster or a cluster where every location
+// already shares a route has no real "gap" to reason about.
+function formatTransitGapSection(gap: ClusterTransitGap): string | null {
+  if (gap.locations.length < 2 || gap.isolatedLocations.length === 0) {
+    return null;
+  }
+
+  const locationLines = gap.locations
+    .map((location, i) => {
+      const station = location.stationName ?? "인근 정류소 없음";
+      const routes =
+        location.routeNames.length > 0
+          ? location.routeNames.join(", ")
+          : "해당 없음";
+      return `${i + 1}. 정류소: ${station} / 경유 노선: ${routes}`;
+    })
+    .join("\n");
+
+  const sharedRoutesLine =
+    gap.sharedRoutes.length > 0
+      ? gap.sharedRoutes.join(", ")
+      : "공통으로 지나는 노선 없음";
+
+  const isolatedLines = gap.isolatedLocations
+    .map((location) => location.stationName ?? "인근 정류소 없음")
+    .join(", ");
+
+  return `# 실측 노선 커버리지 데이터
+지점별 정류소/노선:
+${locationLines}
+
+지점 간 공통 노선: ${sharedRoutesLine}
+다른 지점과 공통 노선이 없는 고립 지점: ${isolatedLines}`;
+}
+
+function buildUserPrompt(
+  cluster: Cluster,
+  members: SavedReport[],
+  transitGapSection: string | null
+) {
   const breakdown = cluster.score_breakdown;
   const breakdownLines = breakdown
     ? (Object.keys(SCORE_FACTOR_LABELS) as Array<keyof typeof SCORE_FACTOR_LABELS>)
@@ -77,11 +149,15 @@ ${breakdownLines}
 
 # 포함된 제보 목록
 ${reportLines}
-
+${transitGapSection ? `\n${transitGapSection}\n` : ""}
 위 데이터를 근거로 규칙에 따라 정책 검토 보고서를 마크다운으로 작성하세요.`;
 }
 
-function validateReportStructure(markdown: string, cluster: Cluster): boolean {
+function validateReportStructure(
+  markdown: string,
+  cluster: Cluster,
+  hadTransitGapSection: boolean
+): boolean {
   const hasAllHeadings = REQUIRED_HEADINGS.every((heading) =>
     markdown.includes(`## ${heading}`)
   );
@@ -92,22 +168,39 @@ function validateReportStructure(markdown: string, cluster: Cluster): boolean {
     if (!markdown.includes(scoreText)) return false;
   }
 
+  // The model has proven unreliable about actually including the optional
+  // transit-gap section even when told it's mandatory when data is present
+  // (seen in practice: real gap data was fed in and the model silently
+  // omitted the section anyway). Enforce it the same way as every other
+  // structural requirement — fail validation and let the caller retry.
+  if (hadTransitGapSection && !markdown.includes("## 대중교통 개선 제안")) {
+    return false;
+  }
+
   return true;
 }
 
-async function requestPolicyReport(cluster: Cluster, members: SavedReport[]) {
+async function requestPolicyReport(
+  cluster: Cluster,
+  members: SavedReport[],
+  transitGap: ClusterTransitGap | null
+) {
+  const transitGapSection = transitGap
+    ? formatTransitGapSection(transitGap)
+    : null;
+
   const raw = await callLLM({
     system: SYSTEM_PROMPT,
-    user: buildUserPrompt(cluster, members),
+    user: buildUserPrompt(cluster, members, transitGapSection),
     jsonMode: false,
   });
   const trimmed = raw.trim();
   const fenceMatch = trimmed.match(/^```(?:markdown|md)?\s*([\s\S]*?)\s*```$/i);
   const markdown = fenceMatch ? fenceMatch[1].trim() : trimmed;
 
-  if (!validateReportStructure(markdown, cluster)) {
+  if (!validateReportStructure(markdown, cluster, transitGapSection != null)) {
     throw new Error(
-      "Generated report is missing required section headings or the priority score citation."
+      "Generated report is missing required section headings, the priority score citation, or the mandatory transit-gap section."
     );
   }
 
@@ -162,12 +255,29 @@ export async function POST(request: Request) {
 
   const members = savedReportSchema.array().parse(membersData);
 
+  // Compute real transit-gap data for bus-related clusters so the report can
+  // reason about actual route coverage instead of guessing from report text.
+  // A GBIS hiccup here shouldn't block report generation — the report is
+  // still valuable without this section, just without the extra grounding.
+  let transitGap: ClusterTransitGap | null = null;
+  if (isBusRelatedCluster(members)) {
+    try {
+      transitGap = await computeClusterTransitGap(members);
+    } catch (error) {
+      if (!(error instanceof GbisApiError)) throw error;
+      console.error(
+        "POST /api/policy-report: failed to compute transit gap, continuing without it",
+        error
+      );
+    }
+  }
+
   let markdown: string;
   try {
-    markdown = await requestPolicyReport(cluster, members);
+    markdown = await requestPolicyReport(cluster, members, transitGap);
   } catch (firstError) {
     try {
-      markdown = await requestPolicyReport(cluster, members);
+      markdown = await requestPolicyReport(cluster, members, transitGap);
     } catch (secondError) {
       console.error(
         "POST /api/policy-report: generation failed twice",
