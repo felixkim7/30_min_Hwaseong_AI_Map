@@ -204,7 +204,7 @@
       "심야 대중교통 공백",
       "택시 부족"
     ],
-    "location_name": "비봉면 사무소 앞",
+    "location_name": "비봉면행정복지센터",
     "time_pattern": "심야",
     "transport_mode": "버스",
     "severity": 5,
@@ -240,14 +240,14 @@
     ]
   },
   {
-    "masked_text": "비봉면 골목길은 가로등이 거의 없어서 밤에 걸어다니기 무섭습니다. 버스에서 내려서 집까지 가는 길이 깜깜합니다.",
+    "masked_text": "화성비봉우편취급국 근처 골목길은 가로등이 거의 없어서 밤에 걸어다니기 무섭습니다. 버스에서 내려서 집까지 가는 길이 깜깜합니다.",
     "category": "교통",
     "sub_category": "보행안전",
     "problem_types": [
       "가로등 부족",
       "야간 안전"
     ],
-    "location_name": "비봉면 주택가",
+    "location_name": "화성비봉우편취급국 인근",
     "time_pattern": "심야",
     "transport_mode": "보행",
     "severity": 5,
@@ -280,13 +280,13 @@
     ]
   },
   {
-    "masked_text": "비봉면에서 야간 근무를 마치고 집에 가려면 버스가 없어서 매번 큰돈 들여 택시를 타야 합니다.",
+    "masked_text": "아주산업 비봉사업소에서 야간 근무를 마치고 집에 가려면 버스가 없어서 매번 큰돈 들여 택시를 타야 합니다.",
     "category": "교통",
     "sub_category": "심야귀가",
     "problem_types": [
       "심야 대중교통 공백"
     ],
-    "location_name": "비봉면 산업단지",
+    "location_name": "아주산업 비봉사업소",
     "time_pattern": "심야",
     "transport_mode": "택시",
     "severity": 4,
@@ -318,13 +318,13 @@
     ]
   },
   {
-    "masked_text": "비봉면은 막차가 너무 일찍 끊겨서 조금만 늦어도 집에 갈 방법이 없습니다.",
+    "masked_text": "비봉면행정복지센터 앞에서 막차가 너무 일찍 끊겨서 조금만 늦어도 집에 갈 방법이 없습니다.",
     "category": "교통",
     "sub_category": "심야귀가",
     "problem_types": [
       "막차 시간 이름"
     ],
-    "location_name": "비봉면 터미널",
+    "location_name": "비봉면행정복지센터",
     "time_pattern": "심야",
     "transport_mode": "버스",
     "severity": 4,
@@ -358,14 +358,14 @@
     ]
   },
   {
-    "masked_text": "봉담읍에서 수원 방향 출근버스가 아침마다 만원이라 두세 대를 보내야 겨우 탑니다.",
+    "masked_text": "봉담읍행정복지센터 앞에서 수원 방향 출근버스가 아침마다 만원이라 두세 대를 보내야 겨우 탑니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "혼잡",
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 주민센터 앞",
+    "location_name": "봉담읍행정복지센터",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 5,
@@ -378,13 +378,13 @@
     ]
   },
   {
-    "masked_text": "봉담 신도시 지역에 버스 노선이 부족해서 수원 시내로 나가려면 한참을 돌아가야 합니다.",
+    "masked_text": "봉담지구대 인근 신도시 지역에 버스 노선이 부족해서 수원 시내로 나가려면 한참을 돌아가야 합니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "노선 부족"
     ],
-    "location_name": "봉담읍 와우리",
+    "location_name": "봉담지구대",
     "time_pattern": "상시",
     "transport_mode": "버스",
     "severity": 3,
@@ -398,13 +398,13 @@
     ]
   },
   {
-    "masked_text": "봉담읍에서 출근할 때 버스 배차간격이 15분이나 되어서 놓치면 지각합니다.",
+    "masked_text": "봉담초등학교 앞에서 출근할 때 버스 배차간격이 15분이나 되어서 놓치면 지각합니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 상리",
+    "location_name": "봉담초등학교",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -437,13 +437,13 @@
     ]
   },
   {
-    "masked_text": "봉담읍에서 화성시청 가는 버스가 너무 뜸해서 볼일 보러 가기가 힘듭니다.",
+    "masked_text": "동화초등학교 앞에서 화성시청 가는 버스가 너무 뜸해서 볼일 보러 가기가 힘듭니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 동화리",
+    "location_name": "동화초등학교",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 3,
@@ -456,13 +456,13 @@
     ]
   },
   {
-    "masked_text": "봉담읍에 있는 대학교 통학버스가 부족해서 자차 없는 학생들은 매일 고생입니다.",
+    "masked_text": "수원대학교 정문에서 대학교 통학버스가 부족해서 자차 없는 학생들은 매일 고생입니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "노선 부족"
     ],
-    "location_name": "봉담읍 대학교 인근",
+    "location_name": "수원대학교 정문",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -475,13 +475,13 @@
     ]
   },
   {
-    "masked_text": "봉담읍 수영리 주민인데 출근버스가 한 시간에 두 대뿐이라 매우 불편합니다.",
+    "masked_text": "수영초등학교 앞 주민인데 출근버스가 한 시간에 두 대뿐이라 매우 불편합니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 수영리",
+    "location_name": "수영초등학교",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -495,13 +495,13 @@
     ]
   },
   {
-    "masked_text": "봉담읍에서 아이를 등원시키고 출근하려면 버스 시간이 너무 안 맞아서 매일 지각 위기입니다.",
+    "masked_text": "덕우저수지 근처에서 아이를 등원시키고 출근하려면 버스 시간이 너무 안 맞아서 매일 지각 위기입니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 삼리",
+    "location_name": "덕우저수지 인근",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 3,
@@ -515,14 +515,14 @@
     ]
   },
   {
-    "masked_text": "봉담읍 공단 근로자인데 출근버스가 부족해서 새벽부터 나와서 기다립니다.",
+    "masked_text": "나이스파크 봉담 원희캐슬 지식산업단지에서 일하는 근로자인데 출근버스가 부족해서 새벽부터 나와서 기다립니다.",
     "category": "교통",
     "sub_category": "버스 배차",
     "problem_types": [
       "노선 부족",
       "배차간격 과다"
     ],
-    "location_name": "봉담읍 산업단지",
+    "location_name": "나이스파크 봉담 원희캐슬 지식산업단지",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -535,14 +535,14 @@
     ]
   },
   {
-    "masked_text": "향남읍에서 병점역까지 가려면 버스를 두 번이나 갈아타야 해서 한 시간 넘게 걸립니다.",
+    "masked_text": "향남환승터미널에서 병점역까지 가려면 버스를 두 번이나 갈아타야 해서 한 시간 넘게 걸립니다.",
     "category": "교통",
     "sub_category": "환승",
     "problem_types": [
       "직행 노선 부재",
       "이동시간 과다"
     ],
-    "location_name": "향남읍 터미널",
+    "location_name": "향남환승터미널",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -575,13 +575,13 @@
     ]
   },
   {
-    "masked_text": "향남 신도시에서 병점역까지 환승 정보가 잘 안 나와서 어느 버스를 타야 할지 헷갈립니다.",
+    "masked_text": "향남신도시1지구에서 병점역까지 환승 정보가 잘 안 나와서 어느 버스를 타야 할지 헷갈립니다.",
     "category": "교통",
     "sub_category": "환승",
     "problem_types": [
       "안내 부족"
     ],
-    "location_name": "향남읍 신도시",
+    "location_name": "향남신도시1지구",
     "time_pattern": "상시",
     "transport_mode": "버스",
     "severity": 2,
@@ -594,13 +594,13 @@
     ]
   },
   {
-    "masked_text": "향남읍에서 병점역으로 통근하는데 버스가 자주 늦게 와서 기차를 놓친 적이 여러 번입니다.",
+    "masked_text": "향남환승터미널에서 병점역으로 통근하는데 버스가 자주 늦게 와서 기차를 놓친 적이 여러 번입니다.",
     "category": "교통",
     "sub_category": "환승",
     "problem_types": [
       "정시성 부족"
     ],
-    "location_name": "향남읍 터미널",
+    "location_name": "향남환승터미널",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 4,
@@ -614,13 +614,13 @@
     ]
   },
   {
-    "masked_text": "향남읍은 병점역뿐 아니라 동탄역 방향으로도 대중교통이 부족해서 이동이 매우 불편합니다.",
+    "masked_text": "향남시범한우물마을휴먼시아5단지아파트에서 병점역뿐 아니라 동탄역 방향으로도 대중교통이 부족해서 이동이 매우 불편합니다.",
     "category": "교통",
     "sub_category": "환승",
     "problem_types": [
       "노선 부족"
     ],
-    "location_name": "향남읍 시범단지",
+    "location_name": "향남시범한우물마을휴먼시아5단지아파트",
     "time_pattern": "상시",
     "transport_mode": "버스",
     "severity": 3,
@@ -634,13 +634,13 @@
     ]
   },
   {
-    "masked_text": "향남읍 고등학생인데 병점역 통학버스가 만원이라 서서 가는 경우가 대부분입니다.",
+    "masked_text": "향남고등학교 앞 학생인데 병점역 통학버스가 만원이라 서서 가는 경우가 대부분입니다.",
     "category": "교통",
     "sub_category": "환승",
     "problem_types": [
       "혼잡"
     ],
-    "location_name": "향남읍 고등학교 앞",
+    "location_name": "향남고등학교",
     "time_pattern": "평일 출근",
     "transport_mode": "버스",
     "severity": 3,
@@ -653,13 +653,13 @@
     ]
   },
   {
-    "masked_text": "매송면 도로가 출퇴근 시간마다 심각하게 막혀서 20분 거리를 40분 넘게 걸립니다.",
+    "masked_text": "화성매송초등학교 앞 도로가 출퇴근 시간마다 심각하게 막혀서 20분 거리를 40분 넘게 걸립니다.",
     "category": "교통",
     "sub_category": "도로정체",
     "problem_types": [
       "상습 정체"
     ],
-    "location_name": "매송면 사거리",
+    "location_name": "화성매송초등학교",
     "time_pattern": "평일 출근",
     "transport_mode": "자동차",
     "severity": 4,
@@ -673,14 +673,14 @@
     ]
   },
   {
-    "masked_text": "장안면 도로가 화물차가 많이 다녀서 항상 정체되고 사고 위험도 높습니다.",
+    "masked_text": "화성장안 첨단제2일반산업단지 진입로가 화물차가 많이 다녀서 항상 정체되고 사고 위험도 높습니다.",
     "category": "교통",
     "sub_category": "도로정체",
     "problem_types": [
       "상습 정체",
       "안전 우려"
     ],
-    "location_name": "장안면 산업도로",
+    "location_name": "화성장안 첨단제2일반산업단지",
     "time_pattern": "평일 출근",
     "transport_mode": "자동차",
     "severity": 4,
@@ -691,13 +691,13 @@
     ]
   },
   {
-    "masked_text": "병점동 사거리는 신호주기가 너무 길어서 차가 조금만 밀려도 정체가 심해집니다.",
+    "masked_text": "병점역 앞 사거리는 신호주기가 너무 길어서 차가 조금만 밀려도 정체가 심해집니다.",
     "category": "교통",
     "sub_category": "도로정체",
     "problem_types": [
       "신호 체계 미흡"
     ],
-    "location_name": "병점동 사거리",
+    "location_name": "병점역",
     "time_pattern": "평일 퇴근",
     "transport_mode": "자동차",
     "severity": 3,
@@ -708,13 +708,13 @@
     ]
   },
   {
-    "masked_text": "남양읍 중심가는 주말마다 나들이 차량이 몰려서 도로가 마비 수준입니다.",
+    "masked_text": "남양성모성지 인근 중심가는 주말마다 나들이 차량이 몰려서 도로가 마비 수준입니다.",
     "category": "교통",
     "sub_category": "도로정체",
     "problem_types": [
       "주말 정체"
     ],
-    "location_name": "남양읍 중심가",
+    "location_name": "남양성모성지",
     "time_pattern": "주말",
     "transport_mode": "자동차",
     "severity": 3,
@@ -746,13 +746,13 @@
     ]
   },
   {
-    "masked_text": "석우동 주택가 골목은 보도가 없어서 차와 사람이 같이 다녀야 해서 위험합니다.",
+    "masked_text": "동탄예당마을롯데캐슬아파트 뒤편 골목은 보도가 없어서 차와 사람이 같이 다녀야 해서 위험합니다.",
     "category": "교통",
     "sub_category": "보행안전",
     "problem_types": [
       "보도 미설치"
     ],
-    "location_name": "석우동 주택가",
+    "location_name": "동탄예당마을롯데캐슬아파트",
     "time_pattern": "상시",
     "transport_mode": "보행",
     "severity": 4,
@@ -766,13 +766,13 @@
     ]
   },
   {
-    "masked_text": "반송동 대로변 횡단보도가 신호 시간이 짧아서 어르신들이 다 건너지 못하고 중간에 갇힙니다.",
+    "masked_text": "시범 한빛마을 앞 대로변 횡단보도가 신호 시간이 짧아서 어르신들이 다 건너지 못하고 중간에 갇힙니다.",
     "category": "교통",
     "sub_category": "교통약자",
     "problem_types": [
       "신호 시간 부족"
     ],
-    "location_name": "반송동 대로",
+    "location_name": "시범 한빛마을",
     "time_pattern": "상시",
     "transport_mode": "보행",
     "severity": 4,
@@ -786,13 +786,13 @@
     ]
   },
   {
-    "masked_text": "우정읍 버스정류장에 휠체어가 오를 수 있는 저상버스가 거의 안 다녀서 장애인이 이용하기 어렵습니다.",
+    "masked_text": "우정읍행정복지센터 앞 정류장에 휠체어가 오를 수 있는 저상버스가 거의 안 다녀서 장애인이 이용하기 어렵습니다.",
     "category": "교통",
     "sub_category": "교통약자",
     "problem_types": [
       "저상버스 부족"
     ],
-    "location_name": "우정읍 버스정류장",
+    "location_name": "우정읍행정복지센터",
     "time_pattern": "상시",
     "transport_mode": "버스",
     "severity": 4,
@@ -805,13 +805,13 @@
     ]
   },
   {
-    "masked_text": "송산면 정류장에는 벤치도 없고 비를 피할 곳도 없어서 어르신들이 서서 비를 맞으며 기다립니다.",
+    "masked_text": "송산면행정복지센터 앞 정류장에는 벤치도 없고 비를 피할 곳도 없어서 어르신들이 서서 비를 맞으며 기다립니다.",
     "category": "교통",
     "sub_category": "교통약자",
     "problem_types": [
       "편의시설 부족"
     ],
-    "location_name": "송산면 정류장",
+    "location_name": "송산면행정복지센터",
     "time_pattern": "상시",
     "transport_mode": "버스",
     "severity": 3,
@@ -824,14 +824,14 @@
     ]
   },
   {
-    "masked_text": "정남면에서 휠체어를 타고 이동하는데 인도 경사가 심하고 턱이 높아서 혼자 다니기 힘듭니다.",
+    "masked_text": "정남면행정복지센터 앞에서 휠체어를 타고 이동하는데 인도 경사가 심하고 턱이 높아서 혼자 다니기 힘듭니다.",
     "category": "교통",
     "sub_category": "교통약자",
     "problem_types": [
       "보도 턱",
       "경사 문제"
     ],
-    "location_name": "정남면 주민센터 앞",
+    "location_name": "정남면행정복지센터",
     "time_pattern": "상시",
     "transport_mode": "보행",
     "severity": 4,
@@ -2681,6 +2681,1825 @@
     "summary": "남양읍임시행정복지센터 정류장 시야가 공사 가림막에 가려집니다.",
     "suggested_policies": [
       "임시 안내 표지 설치"
+    ]
+  },
+  {
+    "masked_text": "남양초등학교 앞 정류장은 등하교 시간에 학부모 차량이 몰려서 버스가 정차하기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "정시성 부족",
+      "혼잡"
+    ],
+    "location_name": "남양초등학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "학생",
+      "보호자"
+    ],
+    "summary": "남양초등학교 앞 정류장이 등교 시간대 혼잡으로 버스 정차가 어렵습니다.",
+    "suggested_policies": [
+      "정차 구역 확보"
+    ]
+  },
+  {
+    "masked_text": "남양성모성지 근처 사는데 순례객 버스 때문에 주민들이 타는 일반 버스가 자주 늦게 옵니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "정시성 부족"
+    ],
+    "location_name": "남양성모성지",
+    "time_pattern": "주말",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "남양성모성지 인근 주말 순례객 버스로 일반 노선 정시성이 떨어집니다.",
+    "suggested_policies": [
+      "주말 노선 분리 운행"
+    ]
+  },
+  {
+    "masked_text": "능동중학교 앞 횡단보도는 신호가 있긴 한데 좌회전 차량이 안 서줘서 애들이 위험합니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려",
+      "신호 체계 미흡"
+    ],
+    "location_name": "능동중학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "보행",
+    "severity": 4,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "능동중학교 앞 횡단보도에서 좌회전 차량으로 인한 안전 문제가 있습니다.",
+    "suggested_policies": [
+      "좌회전 신호 분리"
+    ]
+  },
+  {
+    "masked_text": "능동중학교 근처 버스정류장에 지붕이 없어서 여름엔 땡볕에 겨울엔 칼바람 맞으며 기다립니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "능동중학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "능동중학교 인근 정류장에 비바람을 막을 시설이 없습니다.",
+    "suggested_policies": [
+      "정류장 쉘터 설치"
+    ]
+  },
+  {
+    "masked_text": "청계중학교 앞 정류장에서 동탄역 가는 버스가 배차간격이 길어서 지각하는 학생들이 많습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "청계중학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "청계중학교 정류장에서 동탄역 방면 배차간격이 길어 지각 위험이 있습니다.",
+    "suggested_policies": [
+      "등교시간대 배차 확대"
+    ]
+  },
+  {
+    "masked_text": "동탄역시범금강펜테리움센트럴파크3차아파트 단지 정류장에 버스 도착 알림 전광판이 고장난 지 오래됐습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "실시간 정보 부재"
+    ],
+    "location_name": "동탄역시범금강펜테리움센트럴파크3차아파트",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "동탄역시범금강펜테리움센트럴파크3차아파트 정류장의 전광판이 고장 상태입니다.",
+    "suggested_policies": [
+      "전광판 수리"
+    ]
+  },
+  {
+    "masked_text": "동탄역시범금강펜테리움센트럴파크3차아파트에서 청계중학교 가는 노선이 하나뿐이라 그 버스 놓치면 지각합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "동탄역시범금강펜테리움센트럴파크3차아파트",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "동탄역시범금강펜테리움센트럴파크3차아파트에서 청계중학교 방면 노선이 부족합니다.",
+    "suggested_policies": [
+      "통학 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "동탄테크노밸리 출근하는데 셔틀버스가 부족해서 새벽 첫차를 타야만 자리에 앉을 수 있습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "수요 대비 공급 부족",
+      "혼잡"
+    ],
+    "location_name": "동탄테크노밸리",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "동탄테크노밸리 출근 셔틀버스가 수요에 비해 부족합니다.",
+    "suggested_policies": [
+      "셔틀버스 증차"
+    ]
+  },
+  {
+    "masked_text": "동탄테크노밸리에서 퇴근할 때 막차 시간이 일러서 야근하면 택시비가 부담됩니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "막차 시간 이름"
+    ],
+    "location_name": "동탄테크노밸리",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "동탄테크노밸리 막차 시간이 일러 야근자의 귀가가 어렵습니다.",
+    "suggested_policies": [
+      "막차 시간 연장"
+    ]
+  },
+  {
+    "masked_text": "동탄역롯데캐슬아파트 앞 정류장은 버스가 많이 서긴 하는데 정류장이 좁아서 두 대가 동시에 서면 뒤차가 못 붙습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "동탄역롯데캐슬아파트",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "동탄역롯데캐슬아파트 정류장이 협소해 버스 정차에 어려움이 있습니다.",
+    "suggested_policies": [
+      "정류장 확장"
+    ]
+  },
+  {
+    "masked_text": "우정공업단지 근무자인데 통근버스 배차가 하루 두 번뿐이라 잔업하면 대중교통이 끊깁니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다",
+      "수요 대비 공급 부족"
+    ],
+    "location_name": "우정공업단지",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "우정공업단지 통근버스 배차가 매우 부족합니다.",
+    "suggested_policies": [
+      "통근버스 증편"
+    ]
+  },
+  {
+    "masked_text": "우정공업단지 정문 앞에 인도가 없어서 출근하는 근로자들이 갓길로 걸어다닙니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "보도 미설치",
+      "안전 우려"
+    ],
+    "location_name": "우정공업단지",
+    "time_pattern": "평일 출근",
+    "transport_mode": "보행",
+    "severity": 4,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "우정공업단지 정문 인근에 보도가 없어 보행 안전이 우려됩니다.",
+    "suggested_policies": [
+      "보도 신설"
+    ]
+  },
+  {
+    "masked_text": "화성마도일반산업단지 근로자인데 마도면 쪽에서 오는 버스가 하루 세 대뿐이라 대부분 자차로 옵니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "화성마도일반산업단지",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "화성마도일반산업단지 방면 버스 운행 횟수가 매우 적습니다.",
+    "suggested_policies": [
+      "노선 신설 검토"
+    ]
+  },
+  {
+    "masked_text": "팔탄면행정복지센터 앞 정류장에서 향남 쪽으로 가는 버스가 배차간격이 길어서 병원 예약 시간 맞추기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "팔탄면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "팔탄면행정복지센터에서 향남 방면 배차간격이 길어 불편합니다.",
+    "suggested_policies": [
+      "향남 연계 노선 배차 확대"
+    ]
+  },
+  {
+    "masked_text": "팔탄면행정복지센터 정류장 근처 도로에 가로등이 없어서 밤에 버스 내려서 걷기 무섭습니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "가로등 부족"
+    ],
+    "location_name": "팔탄면행정복지센터",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "팔탄면행정복지센터 인근 심야 조명이 부족합니다.",
+    "suggested_policies": [
+      "가로등 추가 설치"
+    ]
+  },
+  {
+    "masked_text": "서신면행정복지센터 앞에서 병점 가는 버스가 하루 네 번밖에 없어서 병원 가는 어르신들이 시간 맞추기 어렵습니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "서신면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "서신면행정복지센터에서 병점 방면 배차가 부족해 고령자 이용이 어렵습니다.",
+    "suggested_policies": [
+      "운행 횟수 증대"
+    ]
+  },
+  {
+    "masked_text": "서신면행정복지센터 정류장에 저상버스가 아예 안 다녀서 휠체어 이용자는 콜택시만 이용합니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "저상버스 부족"
+    ],
+    "location_name": "서신면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "장애인"
+    ],
+    "summary": "서신면행정복지센터에 저상버스 운행이 전혀 없습니다.",
+    "suggested_policies": [
+      "저상버스 배치"
+    ]
+  },
+  {
+    "masked_text": "병점초등학교 앞 정류장은 하교 시간에 학생들이 몰려서 인도까지 줄이 이어집니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "병점초등학교",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "병점초등학교 정류장이 하교 시간대 혼잡합니다.",
+    "suggested_policies": [
+      "하교시간대 임시 증차"
+    ]
+  },
+  {
+    "masked_text": "병점2동행정복지센터 앞 정류장 노선도가 오래돼서 실제 운행 노선이랑 다릅니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "병점2동행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "병점2동행정복지센터 정류장의 노선 안내가 실제와 다릅니다.",
+    "suggested_policies": [
+      "노선 안내판 갱신"
+    ]
+  },
+  {
+    "masked_text": "반월동행정복지센터 근처 도로가 출근시간마다 정체돼서 버스도 15분씩 늦게 옵니다.",
+    "category": "교통",
+    "sub_category": "도로정체",
+    "problem_types": [
+      "상습 정체"
+    ],
+    "location_name": "반월동행정복지센터",
+    "time_pattern": "평일 출근",
+    "transport_mode": "자동차",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "반월동행정복지센터 인근 상습 정체로 버스 운행이 지연됩니다.",
+    "suggested_policies": [
+      "신호 체계 개선"
+    ]
+  },
+  {
+    "masked_text": "양감면행정복지센터 앞에서 수원 방향 버스가 하루 두 대뿐이라 거의 이용을 못 합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족",
+      "배차간격 과다"
+    ],
+    "location_name": "양감면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "고령자",
+      "직장인"
+    ],
+    "summary": "양감면행정복지센터에서 수원 방면 버스 운행이 매우 부족합니다.",
+    "suggested_policies": [
+      "노선 증편"
+    ]
+  },
+  {
+    "masked_text": "양감면행정복지센터 정류장 근처 인도가 부서져 있어서 휠체어가 지나가기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "보도 턱"
+    ],
+    "location_name": "양감면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "장애인"
+    ],
+    "summary": "양감면행정복지센터 인근 보도가 파손되어 있습니다.",
+    "suggested_policies": [
+      "보도 정비"
+    ]
+  },
+  {
+    "masked_text": "화성봉담2 공공주택지구 입주민인데 아직 버스 노선이 제대로 안 들어와서 봉담읍내까지 걸어가야 합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "화성봉담2 공공주택지구",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "직장인",
+      "고령자"
+    ],
+    "summary": "화성봉담2 공공주택지구에 버스 노선이 아직 제대로 연결되지 않았습니다.",
+    "suggested_policies": [
+      "신규 택지 연계 노선 신설"
+    ]
+  },
+  {
+    "masked_text": "화성봉담2 공공주택지구 입주 초기라 정류장 표지판도 아직 없고 어디서 타야 할지 안내가 없습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "화성봉담2 공공주택지구",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "화성봉담2 공공주택지구에 정류장 안내 표지가 없습니다.",
+    "suggested_policies": [
+      "정류장 표지판 설치"
+    ]
+  },
+  {
+    "masked_text": "협성대학교 정문 버스정류장에서 밤 10시 넘으면 배차간격이 40분씩 벌어져서 야간 수업 끝나면 한참 기다립니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "협성대학교 정문 버스정류장",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "협성대학교 정문 정류장의 심야 배차간격이 매우 깁니다.",
+    "suggested_policies": [
+      "심야 배차 확대"
+    ]
+  },
+  {
+    "masked_text": "수원대학교 정문 버스정류장 근처 가로등이 하나 나가서 밤에 학생들이 많이 다니는 길인데 어둡습니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "가로등 부족"
+    ],
+    "location_name": "수원대학교 정문 버스정류장",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "수원대학교 정문 정류장 인근 가로등이 고장나 있습니다.",
+    "suggested_policies": [
+      "가로등 수리"
+    ]
+  },
+  {
+    "masked_text": "장안대학교 버스정류장에서 수원역 가는 직행버스가 없어서 다들 봉담읍내에서 환승합니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "직행 노선 부재"
+    ],
+    "location_name": "장안대학교 버스정류장",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "장안대학교 정류장에서 수원역 방면 직행 노선이 없습니다.",
+    "suggested_policies": [
+      "수원역 직행 노선 검토"
+    ]
+  },
+  {
+    "masked_text": "봉담읍행정복지센터 버스정류장 근처 신호등이 고장나서 사흘째 깜빡이만 하고 있습니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "신호등 미설치",
+      "안전 우려"
+    ],
+    "location_name": "봉담읍행정복지센터 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "봉담읍행정복지센터 정류장 인근 신호등이 고장 상태입니다.",
+    "suggested_policies": [
+      "신호등 긴급 수리"
+    ]
+  },
+  {
+    "masked_text": "봉담호수공원 버스정류장에서 협성대 방향 노선이 저녁 8시면 끊겨서 야간 산책 다녀오면 못 탑니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "막차 시간 이름"
+    ],
+    "location_name": "봉담호수공원 버스정류장",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "봉담호수공원 정류장의 저녁 시간대 막차가 너무 이릅니다.",
+    "suggested_policies": [
+      "운행 시간 연장"
+    ]
+  },
+  {
+    "masked_text": "봉담초등학교 앞 정류장 벤치가 낡아서 부러질 것 같은데 오래 방치돼 있습니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "봉담초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "봉담초등학교 정류장 벤치가 노후화되었습니다.",
+    "suggested_policies": [
+      "벤치 교체"
+    ]
+  },
+  {
+    "masked_text": "동화초등학교 앞 정류장 근처 도로 포장이 파여서 버스가 지나갈 때마다 크게 흔들립니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "동화초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "자동차",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "동화초등학교 인근 도로 포장이 파손되었습니다.",
+    "suggested_policies": [
+      "도로 포장 보수"
+    ]
+  },
+  {
+    "masked_text": "수영초등학교 앞에서 봉담읍내 나가는 버스가 등교시간대에는 만원이라 아이들이 못 타는 경우가 있습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "수영초등학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "수영초등학교 앞 등교시간대 버스 혼잡이 심합니다.",
+    "suggested_policies": [
+      "등교시간대 증차"
+    ]
+  },
+  {
+    "masked_text": "덕우저수지 인근 낚시하러 오는 사람들 차량 때문에 주말마다 버스가 진입을 못 할 정도로 막힙니다.",
+    "category": "교통",
+    "sub_category": "도로정체",
+    "problem_types": [
+      "주말 정체"
+    ],
+    "location_name": "덕우저수지 인근",
+    "time_pattern": "주말",
+    "transport_mode": "자동차",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "덕우저수지 인근 주말 방문 차량으로 도로 정체가 심합니다.",
+    "suggested_policies": [
+      "주말 주차 관리 강화"
+    ]
+  },
+  {
+    "masked_text": "나이스파크 봉담 원희캐슬 지식산업단지 정문 앞 정류장에 벤치도 지붕도 없어서 여름엔 너무 덥습니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "나이스파크 봉담 원희캐슬 지식산업단지",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "나이스파크 봉담 원희캐슬 지식산업단지 정류장에 편의시설이 없습니다.",
+    "suggested_policies": [
+      "정류장 쉘터 설치"
+    ]
+  },
+  {
+    "masked_text": "향남환승터미널에서 팔탄 방향 버스가 하루 세 대뿐이라 이용이 매우 불편합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "향남환승터미널",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "향남환승터미널에서 팔탄 방면 배차가 매우 부족합니다.",
+    "suggested_policies": [
+      "팔탄 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "향남고등학교 앞 정류장 근처 도로에 불법주차 차량이 많아서 버스가 정차선에 못 붙습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "향남고등학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "자동차",
+    "severity": 2,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "향남고등학교 앞 불법주차로 버스 정차가 어렵습니다.",
+    "suggested_policies": [
+      "단속 강화"
+    ]
+  },
+  {
+    "masked_text": "향남신도시1지구 내에 버스정류장이 부족해서 다음 정류장까지 15분을 걸어가야 합니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "향남신도시1지구",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "향남신도시1지구 내 버스정류장 접근성이 떨어집니다.",
+    "suggested_policies": [
+      "정류장 추가 설치"
+    ]
+  },
+  {
+    "masked_text": "향남시범한우물마을휴먼시아5단지아파트 정문 앞 정류장 계단이 높아서 유모차 밀고 타기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "저상버스 부족"
+    ],
+    "location_name": "향남시범한우물마을휴먼시아5단지아파트",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "보호자"
+    ],
+    "summary": "향남시범한우물마을휴먼시아5단지아파트 정류장에 저상버스가 부족합니다.",
+    "suggested_policies": [
+      "저상버스 확대 배치"
+    ]
+  },
+  {
+    "masked_text": "우정읍행정복지센터 앞에서 남양 방향 노선이 하루 두 번뿐이라 관공서 볼일 보기 어렵습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "우정읍행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "우정읍행정복지센터에서 남양 방면 배차가 부족합니다.",
+    "suggested_policies": [
+      "남양 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "장안면행정복지센터 버스정류장에서 발안 가는 노선이 신설됐다는데 실제로는 안 다니는 것 같습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "장안면행정복지센터 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "장안면행정복지센터에서 발안 방면 신설 노선 정보가 실제와 다릅니다.",
+    "suggested_policies": [
+      "노선 운행 여부 재확인 및 안내"
+    ]
+  },
+  {
+    "masked_text": "야목역 앞에 택시 정류장이 없어서 콜택시 부르면 항상 15분 넘게 기다려야 합니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "택시 부족"
+    ],
+    "location_name": "야목역",
+    "time_pattern": "상시",
+    "transport_mode": "택시",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "야목역 인근 택시 대기 시간이 깁니다.",
+    "suggested_policies": [
+      "택시 승강장 지정"
+    ]
+  },
+  {
+    "masked_text": "어천역에서 매송초등학교 방향 버스가 하루 네 번뿐이라 통학하는 아이들이 불편합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "어천역",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "어천역에서 매송초등학교 방면 배차가 부족합니다.",
+    "suggested_policies": [
+      "통학 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "화성매송초등학교 앞 정류장에 안내판이 없어서 버스가 이미 지나갔는지 알 수가 없습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "화성매송초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "화성매송초등학교 정류장에 배차 안내판이 없습니다.",
+    "suggested_policies": [
+      "안내판 설치"
+    ]
+  },
+  {
+    "masked_text": "화성장안 첨단제2일반산업단지 근로자 통근버스가 야간 근무자용은 아예 없어서 다들 자차로 옵니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "심야 대중교통 공백"
+    ],
+    "location_name": "화성장안 첨단제2일반산업단지",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "화성장안 첨단제2일반산업단지에 야간 근무자용 통근버스가 없습니다.",
+    "suggested_policies": [
+      "야간 통근버스 신설"
+    ]
+  },
+  {
+    "masked_text": "병점역 앞 택시 승강장이 항상 만석이라 급할 때 못 잡습니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "택시 부족"
+    ],
+    "location_name": "병점역",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "택시",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "병점역 택시 승강장의 수요 대비 공급이 부족합니다.",
+    "suggested_policies": [
+      "택시 승강장 확충"
+    ]
+  },
+  {
+    "masked_text": "남양성모성지 근처 도로에 인도가 좁아서 순례객과 주민이 뒤엉켜 걷습니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "보도 미설치"
+    ],
+    "location_name": "남양성모성지",
+    "time_pattern": "주말",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "남양성모성지 인근 보행로가 좁아 안전이 우려됩니다.",
+    "suggested_policies": [
+      "보행로 확장"
+    ]
+  },
+  {
+    "masked_text": "남양읍임시행정복지센터 정류장에서 우정읍 방향 노선이 하루 세 대뿐이라 병원 다니기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "남양읍임시행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "남양읍임시행정복지센터에서 우정읍 방면 배차가 부족합니다.",
+    "suggested_policies": [
+      "우정 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "동탄역 급행버스 정류장에서 새치기하는 사람들 때문에 줄이 항상 엉망입니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "동탄역 급행버스 정류장",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "동탄역 급행버스 정류장의 승차 질서가 어지럽습니다.",
+    "suggested_policies": [
+      "대기 줄 안내선 설치"
+    ]
+  },
+  {
+    "masked_text": "동탄역 1번출구 앞 버스정류장 근처 자전거가 인도를 막고 있어서 유모차가 못 지나갑니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "보도 미설치"
+    ],
+    "location_name": "동탄역 1번출구",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [
+      "보호자"
+    ],
+    "summary": "동탄역 1번출구 인근 보행로가 자전거로 막혀 있습니다.",
+    "suggested_policies": [
+      "자전거 거치대 위치 조정"
+    ]
+  },
+  {
+    "masked_text": "동탄역 2번출구 정류장 근처 계단에 미끄럼 방지가 안 되어 있어서 비 오는 날 위험합니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "동탄역 2번출구",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "동탄역 2번출구 계단에 미끄럼 방지 시설이 없습니다.",
+    "suggested_policies": [
+      "미끄럼 방지 시설 설치"
+    ]
+  },
+  {
+    "masked_text": "동탄역 환승주차장에서 주차하고 나오는데 안내 인력이 없어서 출차할 때마다 헤맵니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "동탄역 환승주차장",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "자동차",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "동탄역 환승주차장 출차 안내가 부족합니다.",
+    "suggested_policies": [
+      "출차 안내 표지 확충"
+    ]
+  },
+  {
+    "masked_text": "동탄역 버스환승센터 화장실이 밤 10시면 문을 닫아서 심야에 급하면 곤란합니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "동탄역 버스환승센터",
+    "time_pattern": "심야",
+    "transport_mode": "기타",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "동탄역 버스환승센터 심야 편의시설 이용이 제한적입니다.",
+    "suggested_policies": [
+      "심야 개방 시설 확대"
+    ]
+  },
+  {
+    "masked_text": "동탄역 환승센터에서 대기하는데 안내방송이 잘 안 들려서 어느 버스가 왔는지 헷갈립니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "동탄역 환승센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "동탄역 환승센터 안내방송이 잘 들리지 않습니다.",
+    "suggested_policies": [
+      "방송 시설 개선"
+    ]
+  },
+  {
+    "masked_text": "동탄역시범우남퍼스트빌 정류장에서 청계중학교 가는 노선이 없어서 아이가 두 번 갈아탑니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "직행 노선 부재"
+    ],
+    "location_name": "동탄역시범우남퍼스트빌 버스정류장",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "동탄역시범우남퍼스트빌에서 청계중학교 방면 직행 노선이 없습니다.",
+    "suggested_policies": [
+      "통학 직행 노선 검토"
+    ]
+  },
+  {
+    "masked_text": "시범다은마을 버스정류장 근처 신호등이 야간에는 점멸로 바뀌어서 차들이 속도를 안 줄입니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "신호 체계 미흡",
+      "안전 우려"
+    ],
+    "location_name": "시범다은마을 버스정류장",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "시범다은마을 정류장 인근 야간 신호 운영으로 안전이 우려됩니다.",
+    "suggested_policies": [
+      "야간 신호 운영 재검토"
+    ]
+  },
+  {
+    "masked_text": "비봉면행정복지센터 버스정류장 근처 배수구가 막혀서 비 오면 정류장 앞이 물바다가 됩니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "보도 턱"
+    ],
+    "location_name": "비봉면행정복지센터 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "비봉면행정복지센터 정류장 배수 문제로 이용이 불편합니다.",
+    "suggested_policies": [
+      "배수 시설 정비"
+    ]
+  },
+  {
+    "masked_text": "정남면행정복지센터 버스정류장에서 오산 방향 버스가 하루 세 대뿐이라 통근하기 힘듭니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "정남면행정복지센터 버스정류장",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "정남면행정복지센터에서 오산 방면 배차가 부족합니다.",
+    "suggested_policies": [
+      "오산 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "송산면행정복지센터에서 시화방조제 방향 노선 시간표가 계절마다 바뀌는데 안내가 없어서 헷갈립니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "송산면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "송산면행정복지센터의 계절별 노선 변경 안내가 부족합니다.",
+    "suggested_policies": [
+      "계절별 시간표 안내 강화"
+    ]
+  },
+  {
+    "masked_text": "화성비봉우편취급국 인근에 사는데 버스정류장이 너무 멀어서 노인분들이 20분씩 걸어야 합니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "화성비봉우편취급국 인근",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "화성비봉우편취급국 인근 버스정류장 접근성이 떨어집니다.",
+    "suggested_policies": [
+      "정류장 추가 설치"
+    ]
+  },
+  {
+    "masked_text": "아주산업 비봉사업소 정문 앞 도로에 화물차가 많이 다녀서 버스가 자주 밀립니다.",
+    "category": "교통",
+    "sub_category": "도로정체",
+    "problem_types": [
+      "상습 정체"
+    ],
+    "location_name": "아주산업 비봉사업소",
+    "time_pattern": "평일 출근",
+    "transport_mode": "자동차",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "아주산업 비봉사업소 인근 화물차 통행으로 정체가 발생합니다.",
+    "suggested_policies": [
+      "화물차 전용 우회로 검토"
+    ]
+  },
+  {
+    "masked_text": "봉담지구대 앞 정류장에서 밤에 버스 기다리는데 지구대가 있어서 그런지 그나마 안심은 됩니다만 벤치가 없어요.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "봉담지구대",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "봉담지구대 정류장에 좌석 등 편의시설이 부족합니다.",
+    "suggested_policies": [
+      "벤치 설치"
+    ]
+  },
+  {
+    "masked_text": "향남환승터미널 지하도가 어두워서 밤에 지나가기 무섭습니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "가로등 부족",
+      "야간 안전"
+    ],
+    "location_name": "향남환승터미널",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "향남환승터미널 지하도의 심야 조명이 부족합니다.",
+    "suggested_policies": [
+      "지하도 조명 개선"
+    ]
+  },
+  {
+    "masked_text": "우정읍행정복지센터 버스정류장에서 서신면 방향 버스를 놓치면 다음 차까지 두 시간을 기다려야 합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "우정읍행정복지센터 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 4,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "우정읍행정복지센터에서 서신면 방면 배차간격이 매우 깁니다.",
+    "suggested_policies": [
+      "서신 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "장안대학교 버스정류장 앞 자전거 도로랑 버스 정차 구간이 겹쳐서 자전거 타는 학생들이 위험합니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "장안대학교 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "장안대학교 정류장의 자전거 도로와 버스 정차 구간이 겹쳐 위험합니다.",
+    "suggested_policies": [
+      "정차 구간 재조정"
+    ]
+  },
+  {
+    "masked_text": "협성대학교 정문 버스정류장 근처 상가에서 나오는 오토바이 때문에 버스 승하차할 때 위험한 적이 여러 번 있었습니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "협성대학교 정문 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "협성대학교 정문 정류장 인근 오토바이 통행으로 안전이 우려됩니다.",
+    "suggested_policies": [
+      "승하차 구역 안전 펜스 설치"
+    ]
+  },
+  {
+    "masked_text": "수원대학교 정문 버스정류장에서 학교 정문까지 걸어가는 길에 그늘이 하나도 없어서 여름엔 너무 덥습니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "수원대학교 정문 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "수원대학교 정문 정류장에서 학교까지 그늘막이 부족합니다.",
+    "suggested_policies": [
+      "그늘막 설치"
+    ]
+  },
+  {
+    "masked_text": "봉담읍행정복지센터 버스정류장에서 화성시청 방향 막차가 밤 9시라 저녁 약속 있으면 못 갑니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "막차 시간 이름"
+    ],
+    "location_name": "봉담읍행정복지센터 버스정류장",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "봉담읍행정복지센터에서 화성시청 방면 막차 시간이 너무 이릅니다.",
+    "suggested_policies": [
+      "막차 시간 연장"
+    ]
+  },
+  {
+    "masked_text": "봉담호수공원 버스정류장 근처 자전거 대여소가 정류장을 가려서 버스 오는 게 안 보일 때가 있습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "봉담호수공원 버스정류장",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "봉담호수공원 정류장 시야가 자전거 대여소에 가려집니다.",
+    "suggested_policies": [
+      "시설물 위치 조정"
+    ]
+  },
+  {
+    "masked_text": "야목역 인근 주택가에서 나오는 골목이 좁아서 버스가 회차할 때 사고 위험이 있습니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "야목역 인근 주택가",
+    "time_pattern": "상시",
+    "transport_mode": "자동차",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "야목역 인근 주택가 골목이 좁아 버스 회차 시 안전이 우려됩니다.",
+    "suggested_policies": [
+      "회차 구간 안전시설 보강"
+    ]
+  },
+  {
+    "masked_text": "어천역 정류장에서 매송면행정복지센터 방향 버스가 주말엔 운행을 안 해서 주말에 이동이 어렵습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "어천역",
+    "time_pattern": "주말",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "어천역에서 주말에 매송면 방면 버스 운행이 없습니다.",
+    "suggested_policies": [
+      "주말 노선 신설"
+    ]
+  },
+  {
+    "masked_text": "동화초등학교 정류장 근처 담벼락이 낮아서 학생들이 담을 넘어 무단횡단하는 걸 자주 봅니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "안전 우려"
+    ],
+    "location_name": "동화초등학교",
+    "time_pattern": "평일 출근",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "동화초등학교 인근 무단횡단 위험이 있습니다.",
+    "suggested_policies": [
+      "펜스 보강 및 계도"
+    ]
+  },
+  {
+    "masked_text": "수영초등학교 근처 버스정류장에 CCTV가 없어서 학부모들이 아이 등하교를 걱정합니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "방범 시설 부족"
+    ],
+    "location_name": "수영초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [
+      "학생",
+      "보호자"
+    ],
+    "summary": "수영초등학교 인근 정류장에 방범 시설이 부족합니다.",
+    "suggested_policies": [
+      "CCTV 설치"
+    ]
+  },
+  {
+    "masked_text": "남양초등학교 정류장에서 남양성모성지 방향 버스 배차가 순례 시즌엔 늘었다가 평소엔 확 줄어서 예측이 안 됩니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 비효율"
+    ],
+    "location_name": "남양초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "남양초등학교에서 남양성모성지 방면 배차가 계절별로 불규칙합니다.",
+    "suggested_policies": [
+      "연중 안정적 배차 유지"
+    ]
+  },
+  {
+    "masked_text": "청계중학교 버스정류장 앞에 불법 광고물이 붙어 있어서 노선 안내판이 안 보입니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "청계중학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "청계중학교 정류장 안내판이 불법 광고물에 가려져 있습니다.",
+    "suggested_policies": [
+      "불법 광고물 정비"
+    ]
+  },
+  {
+    "masked_text": "동탄테크노밸리 정류장에서 화성시청 가는 버스가 낮 시간에는 아예 없어서 민원 보러 갈 방법이 없습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "동탄테크노밸리",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "동탄테크노밸리에서 화성시청 방면 낮 시간대 노선이 없습니다.",
+    "suggested_policies": [
+      "시청 연계 노선 검토"
+    ]
+  },
+  {
+    "masked_text": "동탄역롯데캐슬아파트 정류장 계단 손잡이가 녹슬어서 잡기 꺼려집니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "편의시설 부족"
+    ],
+    "location_name": "동탄역롯데캐슬아파트",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "동탄역롯데캐슬아파트 정류장 시설이 노후화되었습니다.",
+    "suggested_policies": [
+      "시설 보수"
+    ]
+  },
+  {
+    "masked_text": "화성마도일반산업단지에서 서신면 방향으로 가는 도로가 좁아서 출퇴근 시간마다 정체가 심합니다.",
+    "category": "교통",
+    "sub_category": "도로정체",
+    "problem_types": [
+      "상습 정체"
+    ],
+    "location_name": "화성마도일반산업단지",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "자동차",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "화성마도일반산업단지 인근 도로가 좁아 상습 정체를 겪습니다.",
+    "suggested_policies": [
+      "도로 확장 검토"
+    ]
+  },
+  {
+    "masked_text": "팔탄면행정복지센터 앞 인도에 전신주가 가운데 박혀 있어서 휠체어가 지나가려면 차도로 내려가야 합니다.",
+    "category": "교통",
+    "sub_category": "교통약자",
+    "problem_types": [
+      "보도 턱"
+    ],
+    "location_name": "팔탄면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "장애인"
+    ],
+    "summary": "팔탄면행정복지센터 인근 보행로에 장애물이 있습니다.",
+    "suggested_policies": [
+      "전신주 이설 검토"
+    ]
+  },
+  {
+    "masked_text": "서신면행정복지센터에서 궁평항 방향 버스가 여름 성수기엔 만원이라 주민들이 못 타는 경우가 많습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡",
+      "수요 대비 공급 부족"
+    ],
+    "location_name": "서신면행정복지센터",
+    "time_pattern": "주말",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "서신면행정복지센터에서 궁평항 방면 여름철 혼잡이 심합니다.",
+    "suggested_policies": [
+      "성수기 임시 증차"
+    ]
+  },
+  {
+    "masked_text": "양감면행정복지센터 앞 도로에 가로등이 듬성듬성 있어서 밤에 버스 내리면 어둡습니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "가로등 부족"
+    ],
+    "location_name": "양감면행정복지센터",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "양감면행정복지센터 인근 심야 조명이 부족합니다.",
+    "suggested_policies": [
+      "가로등 추가 설치"
+    ]
+  },
+  {
+    "masked_text": "화성봉담2 공공주택지구에서 봉담호수공원까지 걸어가는 산책로에 가로등이 없어서 밤에 위험합니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "가로등 부족"
+    ],
+    "location_name": "화성봉담2 공공주택지구",
+    "time_pattern": "심야",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "화성봉담2 공공주택지구에서 봉담호수공원 방면 심야 조명이 부족합니다.",
+    "suggested_policies": [
+      "산책로 가로등 설치"
+    ]
+  },
+  {
+    "masked_text": "병점역 앞 환승 정류장이 협소해서 여러 노선 버스가 한꺼번에 오면 서로 엉킵니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "병점역",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "병점역 환승 정류장이 협소해 혼잡이 발생합니다.",
+    "suggested_policies": [
+      "환승 정류장 확장"
+    ]
+  },
+  {
+    "masked_text": "반월동행정복지센터 정류장에 붙은 시간표가 개편 전 것이라 실제 배차랑 안 맞습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "반월동행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "반월동행정복지센터 정류장 시간표가 실제 배차와 다릅니다.",
+    "suggested_policies": [
+      "시간표 갱신"
+    ]
+  },
+  {
+    "masked_text": "병점2동행정복지센터 앞 도로가 재개발 공사로 인도가 막혀서 차도로 돌아가야 합니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "보도 미설치",
+      "안전 우려"
+    ],
+    "location_name": "병점2동행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [],
+    "summary": "병점2동행정복지센터 인근 공사로 보행로가 막혀 있습니다.",
+    "suggested_policies": [
+      "임시 보행로 확보"
+    ]
+  },
+  {
+    "masked_text": "병점초등학교 정류장에서 화성시청 가는 버스가 있긴 한데 배차간격이 40분이라 거의 못 씁니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "병점초등학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "병점초등학교에서 화성시청 방면 배차간격이 매우 깁니다.",
+    "suggested_policies": [
+      "배차간격 단축"
+    ]
+  },
+  {
+    "masked_text": "우정공업단지 근로자 통근버스가 명절 연휴 전날엔 만차라 회사 버스도 놓치고 시내버스도 못 탔습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "우정공업단지",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "우정공업단지 통근버스가 명절 전 혼잡합니다.",
+    "suggested_policies": [
+      "성수기 임시 증차"
+    ]
+  },
+  {
+    "masked_text": "동탄역시범금강펜테리움센트럴파크3차아파트에서 능동중학교 가는 통학버스가 만원이라 서서 가는 학생이 많습니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "혼잡"
+    ],
+    "location_name": "동탄역시범금강펜테리움센트럴파크3차아파트",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "동탄역시범금강펜테리움센트럴파크3차아파트에서 능동중학교 방면 통학버스가 혼잡합니다.",
+    "suggested_policies": [
+      "통학버스 증차"
+    ]
+  },
+  {
+    "masked_text": "화성마도일반산업단지 근로자 기숙사에서 나오는 버스가 주말엔 아예 운행을 안 해서 장 보러 가기도 힘듭니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "화성마도일반산업단지",
+    "time_pattern": "주말",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "화성마도일반산업단지에서 주말 버스 운행이 없습니다.",
+    "suggested_policies": [
+      "주말 노선 신설"
+    ]
+  },
+  {
+    "masked_text": "팔탄면행정복지센터 정류장에 실시간 도착 안내가 없어서 무작정 나가서 기다려야 합니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "실시간 정보 부재"
+    ],
+    "location_name": "팔탄면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "팔탄면행정복지센터에 실시간 버스 도착 정보가 없습니다.",
+    "suggested_policies": [
+      "버스 도착 정보 전광판 설치"
+    ]
+  },
+  {
+    "masked_text": "서신면행정복지센터 앞 정류장 근처 도로에 신호등이 없어서 차량 통행이 많을 때 건너기 무섭습니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "신호등 미설치"
+    ],
+    "location_name": "서신면행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 3,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "서신면행정복지센터 앞에 신호등이 없어 보행 안전이 우려됩니다.",
+    "suggested_policies": [
+      "신호등 설치"
+    ]
+  },
+  {
+    "masked_text": "양감면행정복지센터에서 병점역 가는 버스를 놓치면 다음 차까지 한 시간 넘게 기다려야 합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "양감면행정복지센터",
+    "time_pattern": "평일 퇴근",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "양감면행정복지센터에서 병점역 방면 배차간격이 매우 깁니다.",
+    "suggested_policies": [
+      "병점역 연계 노선 증편"
+    ]
+  },
+  {
+    "masked_text": "반월동행정복지센터 앞 도로 공사 때문에 버스 노선이 우회하는데 정류장 위치 안내가 없어서 헷갈립니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족",
+      "정차 위치 혼란"
+    ],
+    "location_name": "반월동행정복지센터",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [],
+    "summary": "반월동행정복지센터 인근 공사로 인한 우회 안내가 부족합니다.",
+    "suggested_policies": [
+      "임시 정류장 안내 강화"
+    ]
+  },
+  {
+    "masked_text": "화성봉담2 공공주택지구에서 협성대학교 정문 방향 노선이 배차간격 20분이라 통학하기 애매합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "배차간격 과다"
+    ],
+    "location_name": "화성봉담2 공공주택지구",
+    "time_pattern": "평일 출근",
+    "transport_mode": "버스",
+    "severity": 2,
+    "target_groups": [
+      "학생"
+    ],
+    "summary": "화성봉담2 공공주택지구에서 협성대학교 방면 배차간격이 깁니다.",
+    "suggested_policies": [
+      "통학시간대 배차 확대"
+    ]
+  },
+  {
+    "masked_text": "동탄테크노밸리 정류장 근처 인도에 킥보드가 아무렇게나 세워져 있어서 걸어다니기 불편합니다.",
+    "category": "교통",
+    "sub_category": "보행안전",
+    "problem_types": [
+      "보도 미설치"
+    ],
+    "location_name": "동탄테크노밸리",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "동탄테크노밸리 정류장 인근 보행로가 킥보드로 막혀 있습니다.",
+    "suggested_policies": [
+      "킥보드 주차 구역 지정"
+    ]
+  },
+  {
+    "masked_text": "남양성모성지에서 남양초등학교 방향 순환버스가 있으면 좋겠는데 지금은 아예 없어서 걸어다닙니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "남양성모성지",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 2,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "남양성모성지에서 남양초등학교 방면 순환버스가 없습니다.",
+    "suggested_policies": [
+      "단거리 순환버스 신설 검토"
+    ]
+  },
+  {
+    "masked_text": "우정공업단지 근로자 대상 심야 셔틀이 있다고 들었는데 실제로 타보려 하니 운행을 안 합니다.",
+    "category": "교통",
+    "sub_category": "심야귀가",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "우정공업단지",
+    "time_pattern": "심야",
+    "transport_mode": "버스",
+    "severity": 3,
+    "target_groups": [
+      "직장인"
+    ],
+    "summary": "우정공업단지 심야 셔틀 운행 정보가 실제와 다릅니다.",
+    "suggested_policies": [
+      "운행 여부 재확인 및 안내"
+    ]
+  },
+  {
+    "masked_text": "청계중학교에서 동탄테크노밸리 방향으로 등하교 시간에만 다니는 버스가 있는데 낮에는 아예 없어서 불편합니다.",
+    "category": "교통",
+    "sub_category": "버스 배차",
+    "problem_types": [
+      "노선 부족"
+    ],
+    "location_name": "청계중학교",
+    "time_pattern": "상시",
+    "transport_mode": "버스",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "청계중학교에서 동탄테크노밸리 방면 낮 시간대 버스가 없습니다.",
+    "suggested_policies": [
+      "상시 운행 노선 검토"
+    ]
+  },
+  {
+    "masked_text": "병점역 환승 정류장에서 화장실 위치 안내가 없어서 처음 오는 사람은 한참 헤맵니다.",
+    "category": "교통",
+    "sub_category": "환승",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "병점역",
+    "time_pattern": "상시",
+    "transport_mode": "기타",
+    "severity": 1,
+    "target_groups": [
+      "고령자"
+    ],
+    "summary": "병점역 환승 정류장 편의시설 안내가 부족합니다.",
+    "suggested_policies": [
+      "시설 안내 표지 설치"
+    ]
+  },
+  {
+    "masked_text": "동탄역롯데캐슬아파트 정류장 근처 가로수가 크게 자라서 버스 정류장 표지판을 가리고 있습니다.",
+    "category": "교통",
+    "sub_category": "기타",
+    "problem_types": [
+      "안내 부족"
+    ],
+    "location_name": "동탄역롯데캐슬아파트",
+    "time_pattern": "상시",
+    "transport_mode": "보행",
+    "severity": 1,
+    "target_groups": [],
+    "summary": "동탄역롯데캐슬아파트 정류장 표지판이 가로수에 가려집니다.",
+    "suggested_policies": [
+      "가로수 정리"
     ]
   }
 ]
