@@ -456,25 +456,6 @@
     ]
   },
   {
-    "masked_text": "봉담읍 출근버스가 정시에 안 와서 매번 스마트폰 배차 앱만 들여다보게 됩니다.",
-    "category": "교통",
-    "sub_category": "버스 배차",
-    "problem_types": [
-      "정시성 부족"
-    ],
-    "location_name": "봉담읍 유리",
-    "time_pattern": "평일 출근",
-    "transport_mode": "버스",
-    "severity": 3,
-    "target_groups": [
-      "직장인"
-    ],
-    "summary": "봉담읍 출근버스의 정시성이 떨어져 불편합니다.",
-    "suggested_policies": [
-      "운행 정시성 관리 강화"
-    ]
-  },
-  {
     "masked_text": "봉담읍에 있는 대학교 통학버스가 부족해서 자차 없는 학생들은 매일 고생입니다.",
     "category": "교통",
     "sub_category": "버스 배차",
