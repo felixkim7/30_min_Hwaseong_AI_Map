@@ -27,6 +27,15 @@ const SYSTEM_PROMPT = `당신은 화성시 교통불편 제보를 분석하는 �
 환승 문제는 물리적으로 다른 장소이므로 반드시 별도 그룹입니다). 지역이 같을 때만
 세부 위치(location_name)를 보고 같은 근본 문제인지 판단하세요.
 
+# 절대 규칙 — 같은 지역(district) 안에서도 실제 위치가 멀리 떨어져 있으면 다른 그룹입니다
+"봉담읍", "향남읍" 같은 지역명은 실제로 매우 넓어서, 같은 지역 안에도 서로 몇 km씩
+떨어진 여러 동네(대학가, 읍내 중심, 외곽 마을 등)가 섞여 있을 수 있습니다. 각
+제보에는 [인근구역] 번호 태그가 붙어 있으며, 이 번호는 실제 좌표 기준으로 가까운
+제보끼리 미리 묶어 놓은 것입니다. 같은 지역이라도 [인근구역] 번호가 다르면 물리적으로
+멀리 떨어진 별개의 동네이므로 절대 같은 그룹으로 묶지 마세요. 버스 노선 계획도 이
+동네 단위로 이루어져야 하므로, 지역 전체를 하나로 뭉뚱그리지 말고 실제로 가까운
+정류장·시설끼리만 묶어 더 촘촘하고 지역적인 그룹을 만드세요.
+
 # 절대 규칙 — sub_category가 같아도 problem_types가 다르면 다른 그룹입니다
 sub_category(예: "환승")는 큰 분류일 뿐, 실제 근본 문제는 problem_types와 요약
 문장을 봐야 알 수 있습니다. 예를 들어 "환승"에는 배차간격/혼잡처럼 버스 운행 자체의
@@ -49,19 +58,98 @@ report_indices는 입력으로 주어진 0부터 시작하는 인덱스 번호�
 function buildUserPrompt(
   reports: Pick<
     SavedReport,
+    | "id"
     | "sub_category"
     | "problem_types"
     | "location_name"
     | "district"
     | "time_pattern"
     | "summary"
-  >[]
+  >[],
+  spatialGroupId: Map<string, number>
 ) {
   const lines = reports.map(
     (r, i) =>
-      `${i}. [지역: ${r.district ?? "미상"}] [${r.sub_category}] [문제유형: ${r.problem_types.join(", ") || "미상"}] ${r.location_name} (${r.time_pattern}) - ${r.summary}`
+      `${i}. [지역: ${r.district ?? "미상"}] [인근구역: ${spatialGroupId.get(r.id) ?? 0}] [${r.sub_category}] [문제유형: ${r.problem_types.join(", ") || "미상"}] ${r.location_name} (${r.time_pattern}) - ${r.summary}`
   );
   return `# 제보 목록\n${lines.join("\n")}\n\n위 제보들을 규칙에 따라 그룹으로 묶어 JSON을 출력하세요.`;
+}
+
+// A district like 봉담읍 can span many kilometers and several genuinely
+// distinct local areas (a university campus cluster, a separate town-center
+// cluster, an isolated rural point) — merging all of it into one cluster
+// makes the result useless for local bus-route planning. Reports within this
+// radius of each other are treated as "the same walkable local area" and are
+// allowed to merge; anything farther apart is forced into a separate spatial
+// group before the LLM ever sees it, regardless of matching sub_category.
+// Calibrated against real seed data: a genuinely walkable local cluster
+// (adjacent bus stops, one campus + the stop outside it) stays within ~1.5km
+// of itself, while physically separate neighborhoods in the same 읍 have
+// been observed 2-5km apart.
+const LOCAL_AREA_RADIUS_KM = 1.5;
+
+function haversineKm(
+  a: { lat: number; lng: number },
+  b: { lat: number; lng: number }
+): number {
+  const R = 6371;
+  const dLat = ((b.lat - a.lat) * Math.PI) / 180;
+  const dLng = ((b.lng - a.lng) * Math.PI) / 180;
+  const x =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((a.lat * Math.PI) / 180) *
+      Math.cos((b.lat * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+}
+
+// Groups reports into spatial sub-clusters via connected components: any two
+// reports within LOCAL_AREA_RADIUS_KM of each other are linked, and the
+// result is every report reachable from every other through a chain of such
+// links (not just directly close to one fixed point) — this naturally
+// captures an elongated walkable strip, not only a tight circle. Reports
+// with no geocoded coordinate each form their own singleton group, since
+// there's no distance to compare.
+function groupBySpatialProximity(reports: SavedReport[]): SavedReport[][] {
+  const n = reports.length;
+  const parent = Array.from({ length: n }, (_, i) => i);
+
+  function find(i: number): number {
+    while (parent[i] !== i) {
+      parent[i] = parent[parent[i]];
+      i = parent[i];
+    }
+    return i;
+  }
+  function union(i: number, j: number) {
+    const ri = find(i);
+    const rj = find(j);
+    if (ri !== rj) parent[ri] = rj;
+  }
+
+  for (let i = 0; i < n; i++) {
+    const a = reports[i];
+    if (a.lat == null || a.lng == null) continue;
+    for (let j = i + 1; j < n; j++) {
+      const b = reports[j];
+      if (b.lat == null || b.lng == null) continue;
+      if (
+        haversineKm({ lat: a.lat, lng: a.lng }, { lat: b.lat, lng: b.lng }) <=
+        LOCAL_AREA_RADIUS_KM
+      ) {
+        union(i, j);
+      }
+    }
+  }
+
+  const groups = new Map<number, SavedReport[]>();
+  for (let i = 0; i < n; i++) {
+    const root = find(i);
+    const list = groups.get(root) ?? [];
+    list.push(reports[i]);
+    groups.set(root, list);
+  }
+  return Array.from(groups.values());
 }
 
 // Deterministic tag for whether a report's problem is about bus *operation*
@@ -132,9 +220,29 @@ function describeSplitCluster(
     (a, b) => b[1] - a[1]
   )[0]?.[0];
 
+  // A spatial split within one district can produce several sub-clusters
+  // that would otherwise all get the same "구/군 + problem" title (e.g. two
+  // separate 봉담읍 neighborhoods both titled "봉담읍 배차간격") — include the
+  // most common location name so they read as distinct local areas, not
+  // duplicates of the same cluster.
+  const locationCounts = new Map<string, number>();
+  for (const member of members) {
+    locationCounts.set(
+      member.location_name,
+      (locationCounts.get(member.location_name) ?? 0) + 1
+    );
+  }
+  const topLocation = [...locationCounts.entries()].sort(
+    (a, b) => b[1] - a[1]
+  )[0]?.[0];
+  const areaLabel =
+    topLocation && topLocation !== district
+      ? `${district} ${topLocation}`
+      : district;
+
   const title = topProblemType
-    ? `${district} ${topProblemType}`.slice(0, 20)
-    : `${district} ${subCategory}`.slice(0, 20);
+    ? `${areaLabel} ${topProblemType}`.slice(0, 20)
+    : `${areaLabel} ${subCategory}`.slice(0, 20);
 
   const locationNames = [...new Set(members.map((m) => m.location_name))];
   const summary =
@@ -151,10 +259,13 @@ function stripCodeFences(text: string): string {
   return fenceMatch ? fenceMatch[1].trim() : trimmed;
 }
 
-async function requestGrouping(reports: SavedReport[]) {
+async function requestGrouping(
+  reports: SavedReport[],
+  spatialGroupId: Map<string, number>
+) {
   const raw = await callLLM({
     system: SYSTEM_PROMPT,
-    user: buildUserPrompt(reports),
+    user: buildUserPrompt(reports, spatialGroupId),
   });
   const cleaned = stripCodeFences(raw);
   const parsed = JSON.parse(cleaned);
@@ -190,17 +301,44 @@ function chunk<T>(items: T[], size: number): T[][] {
   return chunks;
 }
 
-// Batches are processed independently, so two reports about the same
-// district-wide issue can only end up in the same cluster if they land in
-// the same batch. Sorting by district before chunking keeps each district's
-// reports contiguous (and thus batched together whenever the district has
-// <= MAX_BATCH_SIZE reports), instead of splitting one district's reports
-// across arbitrary batches by insertion order.
-function sortByDistrict(reports: SavedReport[]): SavedReport[] {
+// Assigns each report a spatial group id, scoped within its district (two
+// reports in different districts never share an id even if coincidentally
+// close, since the absolute district rule takes precedence). Used both to
+// keep batches spatially coherent and, more importantly, as a hard boundary
+// the LLM's semantic grouping can never cross — see bySplitKey below.
+function assignSpatialGroupIds(reports: SavedReport[]): Map<string, number> {
+  const byDistrict = new Map<string, SavedReport[]>();
+  for (const report of reports) {
+    const key = report.district ?? "__unknown__";
+    const list = byDistrict.get(key) ?? [];
+    list.push(report);
+    byDistrict.set(key, list);
+  }
+
+  const spatialGroupId = new Map<string, number>();
+  for (const [, districtReports] of byDistrict) {
+    const spatialGroups = groupBySpatialProximity(districtReports);
+    spatialGroups.forEach((group, groupIndex) => {
+      for (const report of group) {
+        spatialGroupId.set(report.id, groupIndex);
+      }
+    });
+  }
+  return spatialGroupId;
+}
+
+// Batches are processed independently, so two reports about the same local
+// issue can only end up in the same cluster if they land in the same batch.
+// Sorting by district then by spatial group before chunking keeps both
+// district and local-area boundaries contiguous, instead of splitting one
+// area's reports across arbitrary batches by insertion order.
+function sortByDistrictAndProximity(reports: SavedReport[]): SavedReport[] {
+  const spatialGroupId = assignSpatialGroupIds(reports);
   return [...reports].sort((a, b) => {
     const da = a.district ?? "";
     const db = b.district ?? "";
-    return da.localeCompare(db);
+    if (da !== db) return da.localeCompare(db);
+    return (spatialGroupId.get(a.id) ?? 0) - (spatialGroupId.get(b.id) ?? 0);
   });
 }
 
@@ -216,7 +354,7 @@ async function mergeSameDistrictSubCategoryClusters() {
 
   const { data: allMembers, error: membersError } = await supabaseServer
     .from("reports")
-    .select("id, cluster_id, sub_category, problem_types")
+    .select("id, cluster_id, sub_category, problem_types, lat, lng")
     .not("cluster_id", "is", null);
   if (membersError || !allMembers) return;
 
@@ -226,6 +364,7 @@ async function mergeSameDistrictSubCategoryClusters() {
     Set<"facility" | "operational">
   >();
   const memberCountByCluster = new Map<string, number>();
+  const coordsByCluster = new Map<string, { lat: number; lng: number }[]>();
   for (const member of allMembers) {
     if (!member.cluster_id) continue;
     const set = subCategoryByCluster.get(member.cluster_id) ?? new Set();
@@ -241,15 +380,34 @@ async function mergeSameDistrictSubCategoryClusters() {
       member.cluster_id,
       (memberCountByCluster.get(member.cluster_id) ?? 0) + 1
     );
+
+    if (member.lat != null && member.lng != null) {
+      const coords = coordsByCluster.get(member.cluster_id) ?? [];
+      coords.push({ lat: member.lat, lng: member.lng });
+      coordsByCluster.set(member.cluster_id, coords);
+    }
+  }
+
+  function clusterCentroid(
+    clusterId: string
+  ): { lat: number; lng: number } | null {
+    const coords = coordsByCluster.get(clusterId);
+    if (!coords || coords.length === 0) return null;
+    return {
+      lat: coords.reduce((sum, c) => sum + c.lat, 0) / coords.length,
+      lng: coords.reduce((sum, c) => sum + c.lng, 0) / coords.length,
+    };
   }
 
   // Same district + same sub_category isn't enough on its own — sub_category
   // is a coarse bucket (e.g. "환승" covers both bus dispatch-interval
   // complaints and unrelated wayfinding/signage complaints at the same
-  // station). Only merge clusters that also share the same problem
-  // classification (facility vs operational — see classifyProblemTypes), so
-  // this safety net can't re-merge groups the model correctly split by root
-  // cause.
+  // station), and a district can span multiple local areas several km apart
+  // (e.g. 봉담읍's university row vs. its town center). Only merge clusters
+  // that also share the same problem classification (facility vs
+  // operational) AND whose centroids are within the same local-area radius,
+  // so this safety net can't re-merge groups the model correctly split by
+  // root cause or by real physical distance.
   const groups = new Map<string, typeof clusters>();
   for (const cluster of clusters) {
     if (!cluster.district) continue;
@@ -265,7 +423,45 @@ async function mergeSameDistrictSubCategoryClusters() {
     groups.set(key, list);
   }
 
-  for (const [, group] of groups) {
+  // Within each (district, sub_category, classification) bucket, further
+  // split into connected components by centroid distance, so clusters more
+  // than LOCAL_AREA_RADIUS_KM apart never get merged even if everything else
+  // matches.
+  const spatiallyCoherentGroups: (typeof clusters)[] = [];
+  for (const bucket of groups.values()) {
+    const n = bucket.length;
+    const parent = Array.from({ length: n }, (_, i) => i);
+    function find(i: number): number {
+      while (parent[i] !== i) {
+        parent[i] = parent[parent[i]];
+        i = parent[i];
+      }
+      return i;
+    }
+    for (let i = 0; i < n; i++) {
+      const centroidI = clusterCentroid(bucket[i].id);
+      if (!centroidI) continue;
+      for (let j = i + 1; j < n; j++) {
+        const centroidJ = clusterCentroid(bucket[j].id);
+        if (!centroidJ) continue;
+        if (haversineKm(centroidI, centroidJ) <= LOCAL_AREA_RADIUS_KM) {
+          const ri = find(i);
+          const rj = find(j);
+          if (ri !== rj) parent[ri] = rj;
+        }
+      }
+    }
+    const components = new Map<number, typeof clusters>();
+    for (let i = 0; i < n; i++) {
+      const root = find(i);
+      const list = components.get(root) ?? [];
+      list.push(bucket[i]);
+      components.set(root, list);
+    }
+    spatiallyCoherentGroups.push(...components.values());
+  }
+
+  for (const group of spatiallyCoherentGroups) {
     if (group.length < 2) continue;
 
     const primary = group.reduce((biggest, c) =>
@@ -337,7 +533,8 @@ export async function POST() {
     return NextResponse.json({ clusters_created: 0, reports_clustered: 0 });
   }
 
-  const batches = chunk(sortByDistrict(reports), MAX_BATCH_SIZE);
+  const spatialGroupId = assignSpatialGroupIds(reports);
+  const batches = chunk(sortByDistrictAndProximity(reports), MAX_BATCH_SIZE);
   let clustersCreated = 0;
   let reportsClustered = 0;
   let batchesFailed = 0;
@@ -353,10 +550,10 @@ export async function POST() {
   async function processBatch(batch: SavedReport[]): Promise<boolean> {
     let groups: Awaited<ReturnType<typeof requestGrouping>>;
     try {
-      groups = await requestGrouping(batch);
+      groups = await requestGrouping(batch, spatialGroupId);
     } catch (firstError) {
       try {
-        groups = await requestGrouping(batch);
+        groups = await requestGrouping(batch, spatialGroupId);
       } catch (secondError) {
         console.error(
           "POST /api/cluster: grouping failed twice for a batch",
@@ -376,15 +573,19 @@ export async function POST() {
       // merge a facility/wayfinding complaint into an operational (dispatch
       // interval/crowding) group that shares the same sub_category (seen in
       // practice — a 동탄역 환승주차장 signage report merged into the
-      // 배차간격 cluster). Split any group spanning multiple districts or
-      // multiple problem-type classifications into separate sub-groups
-      // before persisting, so a prompting mistake can never produce a
-      // cluster that mixes unrelated locations or unrelated root causes.
+      // 배차간격 cluster). Split any group spanning multiple districts,
+      // multiple local spatial areas within a district (e.g. 봉담읍's
+      // university-row reports vs. its town-center reports, several km
+      // apart), or multiple problem-type classifications into separate
+      // sub-groups before persisting, so a prompting mistake — or the model
+      // simply defaulting to district-wide grouping — can never produce a
+      // cluster spanning unrelated locations or root causes.
       const bySplitKey = new Map<string, SavedReport[]>();
       for (const member of members) {
         const districtKey = member.district ?? "__unknown__";
+        const spatialKey = spatialGroupId.get(member.id) ?? 0;
         const classification = classifyProblemTypes(member.problem_types);
-        const key = `${districtKey}::${classification}`;
+        const key = `${districtKey}::${spatialKey}::${classification}`;
         const list = bySplitKey.get(key) ?? [];
         list.push(member);
         bySplitKey.set(key, list);
