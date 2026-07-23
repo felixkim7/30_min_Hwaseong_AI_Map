@@ -103,53 +103,101 @@ function haversineKm(
   return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
 }
 
-// Groups reports into spatial sub-clusters via connected components: any two
-// reports within LOCAL_AREA_RADIUS_KM of each other are linked, and the
-// result is every report reachable from every other through a chain of such
-// links (not just directly close to one fixed point) — this naturally
-// captures an elongated walkable strip, not only a tight circle. Reports
-// with no geocoded coordinate each form their own singleton group, since
-// there's no distance to compare.
+// Groups reports into spatial sub-clusters with a hard cap on each group's
+// own diameter: no two members of the same group are ever more than
+// LOCAL_AREA_RADIUS_KM apart from EACH OTHER, not just from a seed point.
+//
+// Two weaker approaches were tried and rejected before this:
+// 1. Connected components (any two within-radius points get linked, plus
+//    everything transitively reachable) — a chain of short hops can bridge
+//    an entire 읍. Seen with real data: 협성대학교 and 수원대학교 (2.4km
+//    apart) merged because a third point, 봉담지구대, sat within 1.5km of
+//    both.
+// 2. "Everyone within radius of one fixed seed" — better, but a seed
+//    positioned centrally between two far-apart points can still pull both
+//    in, since two points can each be within the radius of a shared seed
+//    while being up to 2x the radius apart from each other. Seen with real
+//    data: 화성봉담2 sat 1.29km from 협성대학교 and 1.34km from 수영초등학교
+//    (2.33km apart from each other), so both joined the same group.
+//
+// This version accepts a candidate into a growing group only if it is
+// within radius of the seed AND within radius of every member already
+// accepted — so the group's diameter can never exceed the radius, and
+// bridging is no longer possible regardless of how a seed is chosen.
+// Reports with no geocoded coordinate each form their own singleton group.
 function groupBySpatialProximity(reports: SavedReport[]): SavedReport[][] {
   const n = reports.length;
-  const parent = Array.from({ length: n }, (_, i) => i);
+  const coords: ({ lat: number; lng: number } | null)[] = reports.map((r) =>
+    r.lat != null && r.lng != null ? { lat: r.lat, lng: r.lng } : null
+  );
 
-  function find(i: number): number {
-    while (parent[i] !== i) {
-      parent[i] = parent[parent[i]];
-      i = parent[i];
-    }
-    return i;
-  }
-  function union(i: number, j: number) {
-    const ri = find(i);
-    const rj = find(j);
-    if (ri !== rj) parent[ri] = rj;
-  }
+  const assigned = new Array<boolean>(n).fill(false);
+  const groups: SavedReport[][] = [];
 
+  // Points with no coordinate can't be grouped by distance — each is its own
+  // singleton group.
   for (let i = 0; i < n; i++) {
-    const a = reports[i];
-    if (a.lat == null || a.lng == null) continue;
-    for (let j = i + 1; j < n; j++) {
-      const b = reports[j];
-      if (b.lat == null || b.lng == null) continue;
-      if (
-        haversineKm({ lat: a.lat, lng: a.lng }, { lat: b.lat, lng: b.lng }) <=
-        LOCAL_AREA_RADIUS_KM
-      ) {
-        union(i, j);
+    if (coords[i] == null) {
+      groups.push([reports[i]]);
+      assigned[i] = true;
+    }
+  }
+
+  while (true) {
+    const unassigned = [];
+    for (let i = 0; i < n; i++) {
+      if (!assigned[i]) unassigned.push(i);
+    }
+    if (unassigned.length === 0) break;
+
+    // Pick the unassigned point with the most unassigned neighbors within
+    // radius as the seed — this tends to produce sensible, dense local
+    // groups first rather than an arbitrary order-dependent result.
+    let bestSeed = unassigned[0];
+    let bestCount = -1;
+    for (const i of unassigned) {
+      let count = 0;
+      for (const j of unassigned) {
+        if (haversineKm(coords[i]!, coords[j]!) <= LOCAL_AREA_RADIUS_KM) {
+          count++;
+        }
+      }
+      if (count > bestCount) {
+        bestCount = count;
+        bestSeed = i;
       }
     }
+
+    // Grow the group from the seed outward, nearest candidates first, only
+    // accepting a candidate if it stays within radius of every member
+    // already in the group — this is what actually caps the diameter.
+    const groupIndices = [bestSeed];
+    assigned[bestSeed] = true;
+
+    const candidates = unassigned
+      .filter((j) => j !== bestSeed)
+      .sort(
+        (a, b) =>
+          haversineKm(coords[bestSeed]!, coords[a]!) -
+          haversineKm(coords[bestSeed]!, coords[b]!)
+      );
+
+    for (const candidate of candidates) {
+      const fitsWithAllMembers = groupIndices.every(
+        (member) =>
+          haversineKm(coords[candidate]!, coords[member]!) <=
+          LOCAL_AREA_RADIUS_KM
+      );
+      if (fitsWithAllMembers) {
+        groupIndices.push(candidate);
+        assigned[candidate] = true;
+      }
+    }
+
+    groups.push(groupIndices.map((i) => reports[i]));
   }
 
-  const groups = new Map<number, SavedReport[]>();
-  for (let i = 0; i < n; i++) {
-    const root = find(i);
-    const list = groups.get(root) ?? [];
-    list.push(reports[i]);
-    groups.set(root, list);
-  }
-  return Array.from(groups.values());
+  return groups;
 }
 
 // Deterministic tag for whether a report's problem is about bus *operation*
@@ -424,41 +472,75 @@ async function mergeSameDistrictSubCategoryClusters() {
   }
 
   // Within each (district, sub_category, classification) bucket, further
-  // split into connected components by centroid distance, so clusters more
-  // than LOCAL_AREA_RADIUS_KM apart never get merged even if everything else
-  // matches.
+  // split by centroid distance so clusters more than LOCAL_AREA_RADIUS_KM
+  // apart never get merged even if everything else matches. Uses the same
+  // seed-anchored grouping as groupBySpatialProximity, not connected
+  // components — components let a chain of intermediate clusters bridge two
+  // centroids that are actually far apart (the exact bug this safety net
+  // must not reintroduce after the main split works around it).
   const spatiallyCoherentGroups: (typeof clusters)[] = [];
   for (const bucket of groups.values()) {
     const n = bucket.length;
-    const parent = Array.from({ length: n }, (_, i) => i);
-    function find(i: number): number {
-      while (parent[i] !== i) {
-        parent[i] = parent[parent[i]];
-        i = parent[i];
-      }
-      return i;
-    }
+    const centroids = bucket.map((c) => clusterCentroid(c.id));
+    const assigned = new Array<boolean>(n).fill(false);
+
     for (let i = 0; i < n; i++) {
-      const centroidI = clusterCentroid(bucket[i].id);
-      if (!centroidI) continue;
-      for (let j = i + 1; j < n; j++) {
-        const centroidJ = clusterCentroid(bucket[j].id);
-        if (!centroidJ) continue;
-        if (haversineKm(centroidI, centroidJ) <= LOCAL_AREA_RADIUS_KM) {
-          const ri = find(i);
-          const rj = find(j);
-          if (ri !== rj) parent[ri] = rj;
+      if (centroids[i] == null) {
+        spatiallyCoherentGroups.push([bucket[i]]);
+        assigned[i] = true;
+      }
+    }
+
+    while (true) {
+      const unassigned: number[] = [];
+      for (let i = 0; i < n; i++) {
+        if (!assigned[i]) unassigned.push(i);
+      }
+      if (unassigned.length === 0) break;
+
+      let bestSeed = unassigned[0];
+      let bestCount = -1;
+      for (const i of unassigned) {
+        let count = 0;
+        for (const j of unassigned) {
+          if (haversineKm(centroids[i]!, centroids[j]!) <= LOCAL_AREA_RADIUS_KM) {
+            count++;
+          }
+        }
+        if (count > bestCount) {
+          bestCount = count;
+          bestSeed = i;
         }
       }
+
+      // Same diameter cap as groupBySpatialProximity: only accept a
+      // candidate centroid if it stays within radius of every centroid
+      // already in the group, not just the seed.
+      const groupIndices = [bestSeed];
+      assigned[bestSeed] = true;
+
+      const candidates = unassigned
+        .filter((j) => j !== bestSeed)
+        .sort(
+          (a, b) =>
+            haversineKm(centroids[bestSeed]!, centroids[a]!) -
+            haversineKm(centroids[bestSeed]!, centroids[b]!)
+        );
+
+      for (const candidate of candidates) {
+        const fitsWithAllMembers = groupIndices.every(
+          (member) =>
+            haversineKm(centroids[candidate]!, centroids[member]!) <=
+            LOCAL_AREA_RADIUS_KM
+        );
+        if (fitsWithAllMembers) {
+          groupIndices.push(candidate);
+          assigned[candidate] = true;
+        }
+      }
+
+      spatiallyCoherentGroups.push(groupIndices.map((i) => bucket[i]));
     }
-    const components = new Map<number, typeof clusters>();
-    for (let i = 0; i < n; i++) {
-      const root = find(i);
-      const list = components.get(root) ?? [];
-      list.push(bucket[i]);
-      components.set(root, list);
-    }
-    spatiallyCoherentGroups.push(...components.values());
   }
 
   for (const group of spatiallyCoherentGroups) {
