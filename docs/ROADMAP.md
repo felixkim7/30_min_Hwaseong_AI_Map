@@ -30,7 +30,7 @@ each part gets built solidly and can be upgraded later without breaking the rest
 | 08 | Public-data integration | phase-08-public-data-integration.md | 05 | Real Gyeonggi transit data as evidence |
 | 09 | Seed & demo polish | phase-09-seed-and-demo-polish.md | all | Seeded map/dashboard + a clean 2-min demo |
 | 10 | Transit gap reasoning | phase-10-transit-gap-reasoning.md | 05, 07, 08 | AI reasons about real route-coverage gaps in the policy report |
-| 11 | Route recommendation map overlay | phase-11-route-recommendation-map.md | 09, 10 | Visualize the suggested corridor on the cluster map |
+| 11 | Route recommendation map overlay (**dropped** — see PROJECT_BRIEF.md) | phase-11-route-recommendation-map.md | 09, 10 | Visualize the suggested corridor on the cluster map |
 
 ## Suggested build order
 
